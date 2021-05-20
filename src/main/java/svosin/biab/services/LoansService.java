@@ -4,7 +4,9 @@ import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import svosin.biab.entities.LoanAccount;
+import svosin.biab.entities.LoanRequest;
 import svosin.biab.entities.Profile;
+import svosin.biab.enums.JobRiskLevel;
 import svosin.biab.repos.LoanAccountRepository;
 import svosin.biab.repos.LoanRequestRepository;
 
@@ -39,5 +41,58 @@ public class LoansService {
 
     //--------------------
 
+    public LoanRequest createLoanRequest(
+            Profile requesterProfile,
+            Money requestedSum,
+            Boolean isFemale,
+            Integer age,
+            Integer yearsOfLivingInASinglePlace,
+            JobRiskLevel jobRiskLevel,
+            Boolean hasRealty,
+            Boolean hasBankAccounts,
+            Boolean hasInsurance,
+            Boolean isWorkingInSocField,
+            Integer workExperience
+    ) {
+        return loanRequestRepository.save(
+                new LoanRequest(
+                        requesterProfile,
+                        requestedSum,
+                        isFemale,
+                        age,
+                        yearsOfLivingInASinglePlace,
+                        jobRiskLevel,
+                        hasRealty,
+                        hasBankAccounts,
+                        hasInsurance,
+                        isWorkingInSocField,
+                        workExperience
+                )
+        );
+    }
+
+    public LoanRequest assessLoanRequest(LoanRequest request) {
+        double currentRating = 0.0;
+        if(request.getIsFemale()) currentRating += 0.4;
+        Integer age = request.getAge();
+        double ageFactor = age > 20? (age - 20) *0.1 : 0;
+        currentRating += Math.min(ageFactor, 0.3);
+        Integer living = request.getYearsOfLivingInASinglePlace();
+        double livingFactor = living > 10? 0.42: living * 0.042;
+        currentRating += livingFactor;
+        switch (request.getJobRiskLevel()) {
+            case JOBRISK_LOW: currentRating += 0.55;
+            case JOBRISK_MEDIUM: currentRating += 0.16;
+        }
+        if(request.getHasBankAccounts()) currentRating += 0.45;
+        if(request.getHasRealty()) currentRating += 0.35;
+        if(request.getHasInsurance()) currentRating += 0.19;
+        if(request.getIsWorkingInSocField()) currentRating += 0.21;
+        currentRating += request.getWorkExperience() * 0.059;
+
+        if(currentRating >= 1.25) request.setIsApproved(true);
+        return loanRequestRepository.save(request);
+
+    }
 
 }
