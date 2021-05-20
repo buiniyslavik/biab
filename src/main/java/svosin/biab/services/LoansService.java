@@ -10,6 +10,7 @@ import svosin.biab.enums.JobRiskLevel;
 import svosin.biab.repos.LoanAccountRepository;
 import svosin.biab.repos.LoanRequestRepository;
 
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Service
@@ -18,6 +19,8 @@ public class LoansService {
     LoanAccountRepository loanAccountRepository;
     @Autowired
     LoanRequestRepository loanRequestRepository;
+
+    double interestRate = 5.0;
 
     public LoanAccount createLoan(
             Double interestRate,
@@ -44,6 +47,7 @@ public class LoansService {
     public LoanRequest createLoanRequest(
             Profile requesterProfile,
             Money requestedSum,
+            Integer requestedTerm,
             Boolean isFemale,
             Integer age,
             Integer yearsOfLivingInASinglePlace,
@@ -52,12 +56,14 @@ public class LoansService {
             Boolean hasBankAccounts,
             Boolean hasInsurance,
             Boolean isWorkingInSocField,
-            Integer workExperience
+            Integer workExperience,
+            Money workIncome
     ) {
         return loanRequestRepository.save(
                 new LoanRequest(
                         requesterProfile,
                         requestedSum,
+                        requestedTerm,
                         isFemale,
                         age,
                         yearsOfLivingInASinglePlace,
@@ -66,16 +72,17 @@ public class LoansService {
                         hasBankAccounts,
                         hasInsurance,
                         isWorkingInSocField,
-                        workExperience
+                        workExperience,
+                        workIncome
                 )
         );
     }
 
-    public LoanRequest assessLoanRequest(LoanRequest request) {
+    public Boolean assessLoanRequest(LoanRequest request) {
         double currentRating = 0.0;
         if(request.getIsFemale()) currentRating += 0.4;
         Integer age = request.getAge();
-        double ageFactor = age > 20? (age - 20) *0.1 : 0;
+        double ageFactor = age > 20? (age - 20)*0.1 : 0;
         currentRating += Math.min(ageFactor, 0.3);
         Integer living = request.getYearsOfLivingInASinglePlace();
         double livingFactor = living > 10? 0.42: living * 0.042;
@@ -90,9 +97,15 @@ public class LoansService {
         if(request.getIsWorkingInSocField()) currentRating += 0.21;
         currentRating += request.getWorkExperience() * 0.059;
 
-        if(currentRating >= 1.25) request.setIsApproved(true);
-        return loanRequestRepository.save(request);
+        Money allowedSum = request.getWorkIncome().dividedBy(
+                (( 1 + (request.getRequestedTerm() + 1 ) * interestRate ) / (2*12*100)),
+                RoundingMode.UNNECESSARY ); // needs fixup that would factor the interest rate in
 
+
+        if( currentRating >= 1.25 && allowedSum.isLessThan(request.getRequestedSum()) )
+            request.setIsApproved(true);
+        loanRequestRepository.save(request);
+        return request.getIsApproved();
     }
 
 }

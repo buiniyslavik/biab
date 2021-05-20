@@ -16,6 +16,7 @@ public class LoanRequest {
     Profile requesterProfile;
     Date requestDate;
     Money requestedSum;
+    Integer requestedTerm; // months
     /*
     Быкова Н.Н. Основные методы анализа кредитоспособности заёмщика //
     Гуманитарные научные исследования. 2017. № 2 [Электронный ресурс].
@@ -28,6 +29,7 @@ public class LoanRequest {
     Boolean hasRealty, hasBankAccounts, hasInsurance;
     Boolean isWorkingInSocField;
     Integer workExperience;
+    Money workIncome;
 
     Double extCorrectionFactor = 0.0;
 
@@ -37,6 +39,7 @@ public class LoanRequest {
     public LoanRequest(
             Profile requesterProfile,
             Money requestedSum,
+            Integer requestedTerm,
             Boolean isFemale,
             Integer age,
             Integer yearsOfLivingInASinglePlace,
@@ -45,10 +48,12 @@ public class LoanRequest {
             Boolean hasBankAccounts,
             Boolean hasInsurance,
             Boolean isWorkingInSocField,
-            Integer workExperience
+            Integer workExperience,
+            Money workIncome
     ) {
         this.requesterProfile = requesterProfile;
         this.requestedSum = requestedSum;
+        this.requestedTerm = requestedTerm;
         this.isFemale = isFemale;
         this.age = age;
         this.yearsOfLivingInASinglePlace = yearsOfLivingInASinglePlace;
@@ -58,5 +63,6 @@ public class LoanRequest {
         this.hasInsurance = hasInsurance;
         this.isWorkingInSocField = isWorkingInSocField;
         this.workExperience = workExperience;
+        this.workIncome = workIncome;
     }
 }
