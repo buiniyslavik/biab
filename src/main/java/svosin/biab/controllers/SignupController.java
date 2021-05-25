@@ -34,7 +34,7 @@ public class SignupController {
             Errors errors)
     {
         userService.createProfile(userDTO);
-        return new ModelAndView("registerOK", "user", userDTO);
+        return new ModelAndView("main", "currUser", userDTO);
     }
 
 }
