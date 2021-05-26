@@ -12,6 +12,7 @@ import svosin.biab.repos.LoanRequestRepository;
 
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class LoansService {
@@ -33,7 +34,7 @@ public class LoansService {
         );
     }
 
-    public Iterable<LoanAccount> getLoanAccountsOfProfile(Profile owner) {
+    public List<LoanAccount> getLoanAccountsOfProfile(Profile owner) {
         return loanAccountRepository.findAllByOwner(owner);
     }
 
@@ -46,7 +47,7 @@ public class LoansService {
 
     public LoanRequest createLoanRequest(
             Profile requesterProfile,
-            Money requestedSum,
+            Integer requestedSum,
             Integer requestedTerm,
             Boolean isFemale,
             Integer age,
@@ -57,7 +58,7 @@ public class LoansService {
             Boolean hasInsurance,
             Boolean isWorkingInSocField,
             Integer workExperience,
-            Money workIncome
+            Integer workIncome
     ) {
         return loanRequestRepository.save(
                 new LoanRequest(
@@ -97,12 +98,12 @@ public class LoansService {
         if(request.getIsWorkingInSocField()) currentRating += 0.21;
         currentRating += request.getWorkExperience() * 0.059;
 
-        Money allowedSum = request.getWorkIncome().dividedBy(
-                (( 1 + (request.getRequestedTerm() + 1 ) * interestRate ) / (2*12*100)),
-                RoundingMode.UNNECESSARY ); // needs fixup that would factor the interest rate in
+        Integer allowedSum = Math.toIntExact(Math.round(request.getWorkIncome() /
+                ((1 + (request.getRequestedTerm() + 1) * interestRate) / (2 * 12 * 100))));
+        // needs fixup that would factor the interest rate in
 
 
-        if( currentRating >= 1.25 && allowedSum.isLessThan(request.getRequestedSum()) )
+        if( currentRating >= 1.25 && allowedSum < request.getRequestedSum() )
             request.setIsApproved(true);
         loanRequestRepository.save(request);
         return request.getIsApproved();

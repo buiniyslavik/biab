@@ -1,0 +1,62 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Заявка на кредит</h1>
+<form action="/loan/new" th:object="${req}" method="POST" enctype="utf8">
+    <div>
+        <label>Сумма</label>
+        <input th:field="*{requestedSum}"/>
+    </div>
+    <div>
+        <label>Срок в месяцах</label>
+        <input th:field="*{requestedTerm}"/>
+    </div>
+    <div>
+        <label>Пол</label>
+        <input th:field="*{isFemale}"/>
+
+    </div>
+    <div>
+        <label>Возраст</label>
+        <input th:field="*{age}"/>
+    </div>
+    <div>
+        <label>Сколько лет вы живёте в своём городе?</label>
+        <input th:field="*{yearsOfLivingInASinglePlace}"/>
+    </div>
+
+    <div>
+        <label>Уровень риска профессии</label>
+        <input th:field="*{jobRiskLevel}"/>
+    </div>
+
+    <div>
+        <label>Вы владеете недвижимостью?</label>
+        <input th:field="*{hasRealty}"/>
+    </div>
+    <div>
+        <label>У вса есть полис ДМС?</label>
+        <input th:field="*{hasInsurance}"/>
+    </div>
+
+    <div>
+        <label>У вас есть счета в других банках?</label>
+        <input th:field="*{hasBankAccounts}"/>
+    </div>
+
+    <div>
+        <label>Ваш работодатель - государственное учреждение?</label>
+        <input th:field="*{isWorkingInSocField}"/>
+    </div>
+    <div>
+        <label>Рабочий стаж (годы):</label>
+        <input th:field="*{workExperience}"/>
+    </div>
+    <div>
+        <label>Зарплата:</label>
+        <input th:field="*{workIncome}"/>
+    </div>
+
+    <button type="submit">submit</button>
+</form>
+</body>
+</html>

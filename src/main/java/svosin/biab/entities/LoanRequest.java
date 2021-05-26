@@ -1,6 +1,7 @@
 package svosin.biab.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.joda.money.Money;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,12 +11,13 @@ import java.util.Date;
 
 @Data
 @Document
+@NoArgsConstructor
 public class LoanRequest {
     @Id
     String id;
     Profile requesterProfile;
     Date requestDate;
-    Money requestedSum;
+    Integer requestedSum;
     Integer requestedTerm; // months
     /*
     Быкова Н.Н. Основные методы анализа кредитоспособности заёмщика //
@@ -29,7 +31,7 @@ public class LoanRequest {
     Boolean hasRealty, hasBankAccounts, hasInsurance;
     Boolean isWorkingInSocField;
     Integer workExperience;
-    Money workIncome;
+    Integer workIncome;
 
     Double extCorrectionFactor = 0.0;
 
@@ -38,7 +40,7 @@ public class LoanRequest {
 
     public LoanRequest(
             Profile requesterProfile,
-            Money requestedSum,
+            Integer requestedSum,
             Integer requestedTerm,
             Boolean isFemale,
             Integer age,
@@ -49,7 +51,7 @@ public class LoanRequest {
             Boolean hasInsurance,
             Boolean isWorkingInSocField,
             Integer workExperience,
-            Money workIncome
+            Integer workIncome
     ) {
         this.requesterProfile = requesterProfile;
         this.requestedSum = requestedSum;
