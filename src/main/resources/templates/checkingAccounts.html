@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Счета</title>
+</head>
+<body>
+<h1>Открытые счета</h1>
+<h2 th:if="${#lists.isEmpty(chkAccounts)}">Открытых счетов нет!</h2>
+<table th:unless="${#lists.isEmpty(chkAccounts)}">
+    <thead>
+    <tr>
+        <td>Номер счёта</td>
+        <td>Баланс</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="acc: ${chkAccounts}">
+        <td th:text="${acc.getId()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
+        <td th:text="${acc.getCurrentBalance().toString()}">over 9000</td>
+    </tr>
+    </tbody>
+
+</table>
+<a href="">Открыть новый счёт</a>
+</body>
+</html>

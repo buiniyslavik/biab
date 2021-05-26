@@ -8,12 +8,14 @@ import svosin.biab.entities.Profile;
 import svosin.biab.exceptions.OutOfFundsException;
 import svosin.biab.repos.CheckingAccountRepository;
 
+import java.util.List;
+
 @Service
 public class CheckingAccountService {
     @Autowired
     CheckingAccountRepository checkingAccountRepository;
 
-    public Iterable<CheckingAccount> getCheckingAccountsOfProfile(Profile owner) {
+    public List<CheckingAccount> getCheckingAccountsOfProfile(Profile owner) {
         return checkingAccountRepository.findAllByOwner(owner);
     }
 

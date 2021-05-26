@@ -21,4 +21,8 @@ public class UserService {
                 new Profile(userDTO)
         );
     }
+
+    public Profile findByUsername(String username) {
+        return profileRepository.findByUsername(username);
+    }
 }

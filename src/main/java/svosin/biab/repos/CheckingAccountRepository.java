@@ -4,6 +4,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import svosin.biab.entities.CheckingAccount;
 import svosin.biab.entities.Profile;
 
+import java.util.List;
+
 public interface CheckingAccountRepository extends MongoRepository<CheckingAccount, String> {
-    Iterable<CheckingAccount> findAllByOwner(Profile owner);
+    List<CheckingAccount> findAllByOwner(Profile owner);
 }
