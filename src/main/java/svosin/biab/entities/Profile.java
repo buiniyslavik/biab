@@ -1,9 +1,12 @@
 package svosin.biab.entities;
 
 import com.google.common.hash.Hashing;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -13,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 
 @Data
 @Document
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Profile {
     @Id
     String userId;
@@ -37,6 +41,11 @@ public class Profile {
     public Profile(UserDTO userDTO) {
         this.username = userDTO.username;
         this.fullname = userDTO.fullName;
-        this.passhash = Hashing.sha256().hashString(userDTO.plainpass, StandardCharsets.UTF_8).toString();
+        BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+        this.passhash = bcpe.encode(userDTO.getPlainpass());
+        System.out.println(this.username);
+        System.out.println(this.fullname);
+        System.out.println(userDTO.getPlainpass());
+        System.out.println(this.passhash);
     }
 }

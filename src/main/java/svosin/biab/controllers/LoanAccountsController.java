@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import svosin.biab.entities.LoanAccount;
 import svosin.biab.entities.LoanRequest;
+import svosin.biab.entities.LoanRequestInfo;
 import svosin.biab.entities.Profile;
 
+import svosin.biab.enums.JobRiskLevel;
 import svosin.biab.services.LoansService;
 import svosin.biab.services.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+
+import static svosin.biab.enums.JobRiskLevel.JOBRISK_HIGH;
 
 @Controller
 @RequestMapping(path = "/loans")
@@ -43,10 +47,20 @@ public class LoanAccountsController {
         return "loanRequest";
     }
 
+    @ModelAttribute("allGenders")
+    public String[] getAllGenders() {
+        return new String[]{ "М", "Ж" };
+    }
+
+    @ModelAttribute("allRiskLevels")
+    public String[] getAllRiskLevels() {
+        return new String[]{"JOBRISK_HIGH", "JOBRISK_MEDIUM", "JOBRISK_LOW"};
+    }
+
     @PostMapping("/new")
-    public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequest loanRequest, Principal principal) {
-        loanRequest.setRequesterProfile(userService.findByUsername(principal.getName()));
-        loanAccountService.assessLoanRequest(loanRequest);
+    public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequestInfo loanRequestInfo, Principal principal) {
+        LoanRequest lr = new LoanRequest(loanRequestInfo, userService.findByUsername(principal.getName()));
+        loanAccountService.assessLoanRequest(lr);
         return "loans";
     }
 

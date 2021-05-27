@@ -28,13 +28,13 @@ public class SignupController {
     }
 
     @PostMapping("/register")
-    public ModelAndView registerUserAccount(
+    public String registerUserAccount(
             @ModelAttribute("user") @Valid UserDTO userDTO,
             HttpServletRequest request,
             Errors errors)
     {
         userService.createProfile(userDTO);
-        return new ModelAndView("main", "currUser", userDTO);
+        return "login";
     }
 
 }

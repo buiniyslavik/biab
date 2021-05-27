@@ -18,11 +18,13 @@
     <tbody>
     <tr th:each="acc: ${chkAccounts}">
         <td th:text="${acc.getId()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-        <td th:text="${acc.getCurrentBalance().toString()}">over 9000</td>
+        <td th:text="${acc.getCurrentBalance().getAmount().toString()}">over 9000</td>
     </tr>
     </tbody>
 
 </table>
-<a href="">Открыть новый счёт</a>
+<form action="/checking/new"  method="POST" enctype="utf8">
+    <button type="submit">Открыть новый счёт</button>
+</form>
 </body>
 </html>

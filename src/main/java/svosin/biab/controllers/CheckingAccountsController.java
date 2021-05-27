@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import svosin.biab.entities.CheckingAccount;
@@ -31,6 +32,13 @@ public class CheckingAccountsController {
         model.addAttribute("chkAccounts", checkingAccounts);
         return "checkingAccounts";
 
+    }
+
+    @PostMapping("/new")
+    public String createCheckingAccount(Principal principal) {
+        Profile currentUser = userService.findByUsername(principal.getName());
+        checkingAccountService.createCheckingAccount(currentUser);
+        return "checkingAccounts";
     }
 
 }

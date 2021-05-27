@@ -67,4 +67,19 @@ public class LoanRequest {
         this.workExperience = workExperience;
         this.workIncome = workIncome;
     }
+    public LoanRequest(LoanRequestInfo lri, Profile owner) {
+        this.requesterProfile = owner;
+        this.requestedSum = lri.requestedSum;
+        this.requestedTerm = lri.requestedTerm;
+        this.isFemale = lri.gender.equals("Ж");
+        this.age = lri.age;
+        this.yearsOfLivingInASinglePlace = lri.yearsOfLivingInASinglePlace;
+        this.jobRiskLevel = lri.jobRiskLevel;
+        this.hasRealty = lri.hasRealty;
+        this.hasBankAccounts = lri.hasBankAccounts;
+        this.hasInsurance = lri.hasInsurance;
+        this.isWorkingInSocField = lri.isWorkingInSocField;
+        this.workExperience = lri.workExperience;
+        this.workIncome = lri.workIncome;
+    }
 }

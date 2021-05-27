@@ -12,7 +12,11 @@
     </div>
     <div>
         <label>Пол</label>
-        <input th:field="*{isFemale}"/>
+        <select th:field="*{gender}">
+            <option th:each="dropValue: ${allGenders}"
+                    th:value="${dropValue}"
+                    th:text="${dropValue}"></option>
+        </select>
 
     </div>
     <div>
@@ -27,20 +31,25 @@
     <div>
         <label>Уровень риска профессии</label>
         <input th:field="*{jobRiskLevel}"/>
+        <select th:field="*{jobRiskLevel}">
+            <option th:each="dropValue: ${allRiskLevels}"
+                    th:value="${dropValue}"
+                    th:text="${dropValue}"></option>
+        </select>
     </div>
 
     <div>
         <label>Вы владеете недвижимостью?</label>
-        <input th:field="*{hasRealty}"/>
+        <input type="checkbox" th:field="*{hasRealty}"/>
     </div>
     <div>
         <label>У вса есть полис ДМС?</label>
-        <input th:field="*{hasInsurance}"/>
+        <input type="checkbox" th:field="*{hasInsurance}"/>
     </div>
 
     <div>
         <label>У вас есть счета в других банках?</label>
-        <input th:field="*{hasBankAccounts}"/>
+        <input type="checkbox" th:field="*{hasBankAccounts}"/>
     </div>
 
     <div>

@@ -1,7 +1,9 @@
 package svosin.biab.entities;
 
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.springframework.data.annotation.Id;
@@ -11,6 +13,7 @@ import java.util.Date;
 
 @Data
 @Document
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CheckingAccount {
     @Id
     String id;
