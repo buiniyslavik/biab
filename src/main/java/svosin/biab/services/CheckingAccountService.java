@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import svosin.biab.entities.CheckingAccount;
 import svosin.biab.entities.Profile;
 import svosin.biab.exceptions.OutOfFundsException;
+import svosin.biab.persistEntities.PersistCheckingAccount;
 import svosin.biab.repos.CheckingAccountRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,26 +18,29 @@ public class CheckingAccountService {
     CheckingAccountRepository checkingAccountRepository;
 
     public List<CheckingAccount> getCheckingAccountsOfProfile(Profile owner) {
-        return checkingAccountRepository.findAllByOwner(owner);
+        var persistForm = checkingAccountRepository.findAllByOwner(owner);
+        List<CheckingAccount> ca = new ArrayList<>();
+        persistForm.forEach(e -> ca.add(new CheckingAccount(e)));
+        return ca;
     }
 
-    public CheckingAccount createCheckingAccount(Profile owner) {
-        return checkingAccountRepository.save(new CheckingAccount(owner));
+    public PersistCheckingAccount createCheckingAccount(Profile owner) {
+        return checkingAccountRepository.save(new CheckingAccount(owner).toPersist());
     }
 
     public Money debitCheckingAccount(String accountId, Money amount) throws OutOfFundsException {
-        CheckingAccount acc = checkingAccountRepository.findById(accountId).orElseThrow();
+        CheckingAccount acc = new CheckingAccount(checkingAccountRepository.findById(accountId).orElseThrow());
         Money bal = acc.getCurrentBalance();
         if(bal.isLessThan(amount)) throw new OutOfFundsException("Not enough funds to credit account");
         bal.minus(amount);
-        checkingAccountRepository.save(acc);
+        checkingAccountRepository.save(acc.toPersist());
         return acc.getCurrentBalance();
     }
     public Money creditCheckingAccount(String accountId, Money amount)  {
-        CheckingAccount acc = checkingAccountRepository.findById(accountId).orElseThrow();
+        CheckingAccount acc = new CheckingAccount(checkingAccountRepository.findById(accountId).orElseThrow());
         Money bal = acc.getCurrentBalance();
         bal.plus(amount);
-        checkingAccountRepository.save(acc);
+        checkingAccountRepository.save(acc.toPersist());
         return acc.getCurrentBalance();
     }
 }

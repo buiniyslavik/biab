@@ -27,7 +27,7 @@ public class CheckingAccountsController {
     public String showAllCheckingAccounts(WebRequest request, Model model, Principal principal) {
         Profile currentUser = userService.findByUsername(principal.getName());
         model.addAttribute("currUser", currentUser);
-        Iterable<CheckingAccount> checkingAccounts = checkingAccountService.getCheckingAccountsOfProfile(currentUser);
+        List<CheckingAccount> checkingAccounts = checkingAccountService.getCheckingAccountsOfProfile(currentUser);
 
         model.addAttribute("chkAccounts", checkingAccounts);
         return "checkingAccounts";
