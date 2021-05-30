@@ -1,6 +1,7 @@
 package svosin.biab.services;
 
 import debitProviders.NullDebitProvider;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import svosin.biab.creditProviders.NullCreditProvider;
 import svosin.biab.entities.CheckingAccount;
 import svosin.biab.entities.Profile;
+import svosin.biab.exceptions.OutOfFundsException;
+import svosin.biab.exceptions.PaymentProcessingException;
 import svosin.biab.interfaces.MoneyCreditProvider;
 import svosin.biab.interfaces.MoneyDebitProvider;
 
@@ -39,9 +42,28 @@ public class PaymentProcessingService {
         return provider.getFeeForAmount(amount);
     }
 
-    public Boolean payToProvider(MoneyDebitProvider provider, CheckingAccount payer, Money amount) {
+    public Boolean payToProvider(MoneyDebitProvider provider, CheckingAccount payer, Money amount, String data) {
         Money fee = provider.getFeeForAmount(amount);
+        try {
+            checkingAccountService.debitCheckingAccount(payer.getId(), amount.plus(fee));
+            provider.processPayment(amount, data);
+        }
+        catch (OutOfFundsException e) {
+            return false;
+        }
+        catch (PaymentProcessingException e) {
+            checkingAccountService.creditCheckingAccount(payer.getId(), amount.plus(fee));
+            return false;
+        }
+        return true;
+    }
 
+    public Boolean fundAccount(MoneyCreditProvider provider, CheckingAccount payee, Money amount) {
+        if(provider.processCredit(amount)) {
+            checkingAccountService.creditCheckingAccount(payee.getId(), amount);
+            return true;
+        }
+        return false;
     }
 
 }
