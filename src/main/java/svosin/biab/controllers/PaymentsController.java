@@ -1,5 +1,6 @@
 package svosin.biab.controllers;
 
+import lombok.SneakyThrows;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,12 +57,13 @@ public class PaymentsController {
         model.addAttribute("provider", provider);
 
         PaymentDraftDTO paymentDraftDTO = new PaymentDraftDTO();
-        paymentDraftDTO.setProvider(provider.getClass().getName());
+  //      paymentDraftDTO.setProvider(provider.getName());
         model.addAttribute("draft", paymentDraftDTO);
         return "paymentStepOne";
     }
 
     @PostMapping("/to/{providerName}/confirm")
+    @SneakyThrows
     public String payToProviderStepTwo(
             Model model,
             Principal principal,
@@ -69,15 +71,17 @@ public class PaymentsController {
             @ModelAttribute("draft") PaymentDraftDTO draftDTO
     ) {
         String rawAmount = draftDTO.getAmount();
+        MoneyDebitProvider provider = (MoneyDebitProvider) Class.forName(providerName).getDeclaredConstructor().newInstance();
         Money amount = Money.parse("RUB " + rawAmount);
-        Money fee = draftDTO.getProvider().getFeeForAmount(Money.parse("RUB " + rawAmount));
+        Money fee = provider.getFeeForAmount(Money.parse("RUB " + rawAmount));
         draftDTO.setFee(
-                draftDTO.getProvider().getFeeForAmount(
+                provider.getFeeForAmount(
                         Money.parse("RUB " + rawAmount)
                 ).toString()
         );
         String total = amount.plus(fee).toString();
         draftDTO.setTotal(total);
+        draftDTO.setProvider(provider.getName());
         model.addAttribute("draft", draftDTO);
         return "paymentStepTwo";
     }
