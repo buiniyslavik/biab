@@ -43,8 +43,9 @@ public class CheckingAccountService {
                checkingAccountRepository.findById(accountId).orElseThrow().getOwner().getUserId(),
                 accountId,
                 LogOperationType.DEBIT,
-                message,
-                amount.toString()
+                amount.toString(),
+                message
+
         );
 
         log.info("debited account " + accountId + " for " + amount.toString());

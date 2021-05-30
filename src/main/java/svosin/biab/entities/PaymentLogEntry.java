@@ -17,7 +17,6 @@ public class PaymentLogEntry {
     String accountId;
     Date date;
     LogOperationType operationType;
-    String providerName;
     String amount;
     String paymentData;
 

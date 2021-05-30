@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>История операций</title>
+</head>
+<body>
+<h1>История операций</h1>
+<h2 th:if="${#lists.isEmpty(entries)}">Операций нет!</h2>
+<table th:unless="${#lists.isEmpty(entries)}">
+    <thead>
+    <tr>
+        <td>Номер счёта</td>
+        <td>Дата</td>
+        <td>Тип операции</td>
+        <td>Сумма</td>
+        <td>Информация</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="e: ${entries}">
+        <td th:text="${e.getAccountId()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
+        <td th:text="${e.getDate().toString()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
+        <td th:text="${e.getOperationType().getValue()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
+        <td th:text="${e.getAmount()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
+        <td th:text="${e.getPaymentData()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
+    </tr>
+    </tbody>
+
+</table>
+</body>
+</html>
