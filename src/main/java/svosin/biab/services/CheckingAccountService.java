@@ -1,5 +1,6 @@
 package svosin.biab.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CheckingAccountService {
     @Autowired
     CheckingAccountRepository checkingAccountRepository;
@@ -32,14 +34,15 @@ public class CheckingAccountService {
         CheckingAccount acc = new CheckingAccount(checkingAccountRepository.findById(accountId).orElseThrow());
         Money bal = acc.getCurrentBalance();
         if(bal.isLessThan(amount)) throw new OutOfFundsException("Not enough funds to credit account");
-        bal.minus(amount);
+        acc.setCurrentBalance(bal.minus(amount));
         checkingAccountRepository.save(acc.toPersist());
+        log.info("debited account " + accountId + " for " + amount.toString());
         return acc.getCurrentBalance();
     }
     public Money creditCheckingAccount(String accountId, Money amount)  {
         CheckingAccount acc = new CheckingAccount(checkingAccountRepository.findById(accountId).orElseThrow());
         Money bal = acc.getCurrentBalance();
-        bal.plus(amount);
+        acc.setCurrentBalance(bal.plus(amount));
         checkingAccountRepository.save(acc.toPersist());
         return acc.getCurrentBalance();
     }

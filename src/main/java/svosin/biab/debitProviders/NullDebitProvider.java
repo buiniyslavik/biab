@@ -1,6 +1,7 @@
 package svosin.biab.debitProviders;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.money.Money;
 import svosin.biab.entities.Ruble;
 import svosin.biab.interfaces.MoneyDebitProvider;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Data
+@Slf4j
 public class NullDebitProvider implements MoneyDebitProvider {
     @Override
     public String getName() {
@@ -37,6 +39,7 @@ public class NullDebitProvider implements MoneyDebitProvider {
 
     @Override
     public Boolean processPayment(Money amount, String data) {
+        log.info("Paid to: "+ data + ", amount " + amount.toString());
         return true;
     }
 }

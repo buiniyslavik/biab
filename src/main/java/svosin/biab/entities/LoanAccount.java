@@ -3,6 +3,7 @@ package svosin.biab.entities;
 import lombok.Data;
 import org.joda.money.Money;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Calendar;
@@ -23,6 +24,7 @@ public class LoanAccount {
     Money initialAmount;
     Money repaidAmount;
 
+    @DBRef
     Profile owner;
     public LoanAccount(Double interestRate, Date expectedCloseDate, Money latePaymentPenalty, Money initialAmount) {
         this.interestRate = interestRate;

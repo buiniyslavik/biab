@@ -6,12 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import svosin.biab.entities.CheckingAccount;
 import svosin.biab.entities.PaymentDraftDTO;
+import svosin.biab.entities.PaymentRequest;
 import svosin.biab.entities.Profile;
-import svosin.biab.entities.Ruble;
-import svosin.biab.interfaces.MoneyCreditProvider;
 import svosin.biab.interfaces.MoneyDebitProvider;
 import svosin.biab.services.CheckingAccountService;
 import svosin.biab.services.PaymentProcessingService;
@@ -59,6 +56,7 @@ public class PaymentsController {
         PaymentDraftDTO paymentDraftDTO = new PaymentDraftDTO();
   //      paymentDraftDTO.setProvider(provider.getName());
         model.addAttribute("draft", paymentDraftDTO);
+
         return "paymentStepOne";
     }
 
@@ -83,7 +81,31 @@ public class PaymentsController {
         draftDTO.setTotal(total);
         draftDTO.setProvider(provider.getName());
         model.addAttribute("draft", draftDTO);
+        model.addAttribute("payCommand", new PaymentDraftDTO());
         return "paymentStepTwo";
+    }
+
+    @PostMapping("/to/{providerName}/process")
+//    @SneakyThrows
+    public String payToProviderStepThree(
+            Model model,
+            Principal principal,
+            @PathVariable String providerName,
+            @ModelAttribute("payCommand") PaymentRequest cmd
+    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        MoneyDebitProvider provider = (MoneyDebitProvider) Class
+                .forName(providerName)
+                .getDeclaredConstructor()
+                .newInstance();
+        model.addAttribute("provider", provider);
+
+        if(paymentProcessingService.payToProvider(
+                provider,
+                checkingAccountService.getCheckingAccountsOfProfile(userService.findByUsername(principal.getName())).get(0),
+                Money.parse("RUB "+ cmd.getAmount()),
+                cmd.getData()
+        )) return "success";
+        else return "fail";
     }
 
 }

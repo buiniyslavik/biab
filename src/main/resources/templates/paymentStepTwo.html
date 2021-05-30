@@ -25,7 +25,10 @@
         </u>
     </div>
 </div>
-<form action="process" th:object="${draft}" method="POST" enctype="utf8">
+<form action="process" th:object="${payCommand}" method="POST" enctype="utf8">
+    <input name="provider" th:value="${draft.getProvider()}">
+    <input name="data" th:value="${draft.getData()}">
+    <input name="amount" th:value="${draft.getAmount()}">
     <button type="submit">Подтвердить</button>
 </form>
 </body>
