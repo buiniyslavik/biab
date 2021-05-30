@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Платежи</title>
+</head>
+<body>
+<h1>Платежи и сервисы</h1>
+<h2 th:if="${#lists.isEmpty(providers)}">Нет доступных платежей!</h2>
+<table th:unless="${#lists.isEmpty(providers)}">
+    <thead>
+    <tr>
+        <td>Название</td>
+        <td>Мин. сумма</td>
+        <td>Макс. сумма</td>
+        <td>Комиссия</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="p: ${providers}">
+        <td>
+            <a th:href="${p.getClass().getSimpleName()}" th:text="${p.getName()}">name goes here</a>
+        </td>
+        <td th:text="${p.getMinAmount().toString()}">min am</td>
+        <td th:text="${p.getMaxAmount().toString()}">max am</td>
+        <td th:text="${p.getFee()}">fee %</td>
+    </tr>
+    </tbody>
+
+</table>
+</body>
+</html>

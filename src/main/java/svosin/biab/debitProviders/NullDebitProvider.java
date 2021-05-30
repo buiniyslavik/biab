@@ -1,4 +1,4 @@
-package debitProviders;
+package svosin.biab.debitProviders;
 
 import lombok.Data;
 import org.joda.money.Money;
@@ -10,6 +10,15 @@ import java.math.RoundingMode;
 
 @Data
 public class NullDebitProvider implements MoneyDebitProvider {
+    @Override
+    public String getName() {
+        return "Тестовый платёж";
+    }
+
+    @Override
+    public String getFee() {
+        return "2%";
+    }
 
     @Override
     public Money getMinAmount() {
