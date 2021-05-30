@@ -41,7 +41,8 @@ public class PaymentProcessingService {
     public Boolean payToProvider(MoneyDebitProvider provider, CheckingAccount payer, Money amount, String data) {
         Money fee = provider.getFeeForAmount(amount);
         try {
-            checkingAccountService.debitCheckingAccount(payer.getId(), amount.plus(fee));
+            checkingAccountService.debitCheckingAccount(payer.getId(), amount.plus(fee),
+                    provider.getName() + " / " + amount.toString() + " / " + data);
             provider.processPayment(amount, data);
         }
         catch (OutOfFundsException e) {

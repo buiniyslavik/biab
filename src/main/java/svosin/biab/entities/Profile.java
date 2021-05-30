@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -35,7 +36,8 @@ public class Profile {
 
     public Profile(String username, String plainpass) {
         this.username = username;
-        this.passhash = Hashing.sha256().hashString(plainpass, StandardCharsets.UTF_8).toString();
+        BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+        this.passhash = bcpe.encode(plainpass);
     }
 
     public Profile(UserDTO userDTO) {
@@ -43,9 +45,5 @@ public class Profile {
         this.fullname = userDTO.fullName;
         BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
         this.passhash = bcpe.encode(userDTO.getPlainpass());
-        System.out.println(this.username);
-        System.out.println(this.fullname);
-        System.out.println(userDTO.getPlainpass());
-        System.out.println(this.passhash);
     }
 }

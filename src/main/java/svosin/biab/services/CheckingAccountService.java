@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import svosin.biab.entities.CheckingAccount;
 import svosin.biab.entities.Profile;
+import svosin.biab.enums.LogOperationType;
 import svosin.biab.exceptions.OutOfFundsException;
 import svosin.biab.persistEntities.PersistCheckingAccount;
 import svosin.biab.repos.CheckingAccountRepository;
@@ -19,6 +20,8 @@ public class CheckingAccountService {
     @Autowired
     CheckingAccountRepository checkingAccountRepository;
 
+    @Autowired
+    PaymentLogService paymentLogService;
     public List<CheckingAccount> getCheckingAccountsOfProfile(Profile owner) {
         var persistForm = checkingAccountRepository.findAllByOwner(owner);
         List<CheckingAccount> ca = new ArrayList<>();
@@ -30,12 +33,20 @@ public class CheckingAccountService {
         return checkingAccountRepository.save(new CheckingAccount(owner).toPersist());
     }
 
-    public Money debitCheckingAccount(String accountId, Money amount) throws OutOfFundsException {
+    public Money debitCheckingAccount(String accountId, Money amount, String message) throws OutOfFundsException {
         CheckingAccount acc = new CheckingAccount(checkingAccountRepository.findById(accountId).orElseThrow());
         Money bal = acc.getCurrentBalance();
         if(bal.isLessThan(amount)) throw new OutOfFundsException("Not enough funds to credit account");
         acc.setCurrentBalance(bal.minus(amount));
         checkingAccountRepository.save(acc.toPersist());
+        paymentLogService.logPayment(
+               checkingAccountRepository.findById(accountId).orElseThrow().getOwner().getUserId(),
+                accountId,
+                LogOperationType.DEBIT,
+                message,
+                amount.toString()
+        );
+
         log.info("debited account " + accountId + " for " + amount.toString());
         return acc.getCurrentBalance();
     }
