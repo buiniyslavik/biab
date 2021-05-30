@@ -20,7 +20,8 @@
     <tbody>
     <tr th:each="p: ${providers}">
         <td>
-            <a th:href="${p.getClass().getSimpleName()}" th:text="${p.getName()}">name goes here</a>
+            <a th:href="${'to/svosin.biab.debitProviders.' + p.getClass().getName() + '/prepare'}"
+               th:text="${p.getName()}">name goes here</a>
         </td>
         <td th:text="${p.getMinAmount().toString()}">min am</td>
         <td th:text="${p.getMaxAmount().toString()}">max am</td>

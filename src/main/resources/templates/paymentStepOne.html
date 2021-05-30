@@ -1,0 +1,35 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>form</h1>
+<div th:object="${provider}">
+    <div>
+        <label>Название</label>
+        <p th:text="*{getName()}"></p>
+    </div>
+    <div>
+        <label>Минимальная сумма</label>
+        <p th:text="*{getMinAmount().toString()}"></p>
+    </div>
+    <div>
+        <label>Максимальная сумма</label>
+        <p th:text="*{getMaxAmount().toString()}"></p>
+    </div>
+    <div>
+        <label>Комиссия</label>
+        <p th:text="*{getFee()}"></p>
+    </div>
+</div>
+<form action="confirm" th:object="${draft}" method="POST" enctype="utf8">
+
+    <div>
+        <label>Номер счёта</label>
+        <input th:field="*{data}"/>
+    </div>
+    <div>
+        <label>Сумма</label>
+        <input th:field="*{amount}"/>
+    </div>
+    <button type="submit">Далее</button>
+</form>
+</body>
+</html>
