@@ -1,5 +1,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
+</head>
 <body>
+
+<div class="topbar-wrapper" style="z-index: 5;">
+    <div class="topbar">
+        <div class="container fixed">
+            <h3><a class="logo" href="/start">Тест-банк</a></h3>
+            <ul>
+                <li><a href="/checking/all">Счета</a></li>
+                <li><a href="">Карты</a></li>
+                <li><a href="/pay/all">Платежи</a></li>
+                <li><a href="/loans/all">Кредиты</a></li>
+                <li><a href="/log/all">История</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <h1>Главная страница</h1>
 <h2 th:text="${currUser}">ФИО</h2>
 <a href="/checking/all">Счета</a>

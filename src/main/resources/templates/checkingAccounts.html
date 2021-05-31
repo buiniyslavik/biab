@@ -3,11 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Счета</title>
+    <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
 </head>
 <body>
+
+<div class="topbar-wrapper" style="z-index: 5;">
+    <div class="topbar">
+        <div class="container fixed">
+            <h3><a class="logo" href="/start">Тест-банк</a></h3>
+            <ul>
+                <li class="active"><a href="/checking/all">Счета</a></li>
+                <li><a href="">Карты</a></li>
+                <li><a href="/pay/all">Платежи</a></li>
+                <li><a href="/loans/all">Кредиты</a></li>
+                <li><a href="/log/all">История</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <h1>Открытые счета</h1>
 <h2 th:if="${#lists.isEmpty(chkAccounts)}">Открытых счетов нет!</h2>
-<table th:unless="${#lists.isEmpty(chkAccounts)}">
+<table class="common-table" th:unless="${#lists.isEmpty(chkAccounts)}">
     <thead>
     <tr>
         <td>Номер счёта</td>
@@ -23,8 +40,8 @@
     </tbody>
 
 </table>
-<form action="/checking/new"  method="POST" enctype="utf8">
-    <button type="submit">Открыть новый счёт</button>
+<form action="/checking/new" method="POST" enctype="utf8">
+    <button class="btn" type="submit">Открыть новый счёт</button>
 </form>
 </body>
 </html>
