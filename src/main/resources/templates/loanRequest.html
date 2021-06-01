@@ -3,11 +3,14 @@
     <meta charset="UTF-8">
     <title>Кредиты</title>
     <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
+    <style>
+        body { padding-top: 70px; }
+    </style>
 </head>
 
 <body>
 
-<div class="topbar-wrapper" style="z-index: 5;">
+<div class="topbar-wrapper navbar-fixed-top" style="z-index: 5;">
     <div class="topbar">
         <div class="container fixed">
             <h3><a class="logo" href="/start">Тест-банк</a></h3>
@@ -22,72 +25,92 @@
     </div>
 </div>
 
-<h1>Заявка на кредит</h1>
-<form action="/loan/new" th:object="${req}" method="POST" enctype="utf8">
-    <div>
-        <label>Сумма</label>
-        <input th:field="*{requestedSum}"/>
-    </div>
-    <div>
-        <label>Срок в месяцах</label>
-        <input th:field="*{requestedTerm}"/>
-    </div>
-    <div>
-        <label>Пол</label>
-        <select th:field="*{gender}">
-            <option th:each="dropValue: ${allGenders}"
-                    th:value="${dropValue}"
-                    th:text="${dropValue}"></option>
-        </select>
+<div class="page-header">
+    <h1>Кредиты</h1>
+</div>
 
-    </div>
-    <div>
-        <label>Возраст</label>
-        <input th:field="*{age}"/>
-    </div>
-    <div>
-        <label>Сколько лет вы живёте в своём городе?</label>
-        <input th:field="*{yearsOfLivingInASinglePlace}"/>
-    </div>
+<div class="container">
+    <form action="/loan/new" th:object="${req}" method="POST" enctype="utf8">
+        <fieldset>
+            <legend>Заявка на кредит</legend>
+            <div class="clearfix">
+                <label for="">Сумма</label>
+                <input type="text" th:field="*{requestedSum}"/>
+            </div>
+            <div class="clearfix">
+                <label for="">Срок в месяцах</label>
+                <input type="text" th:field="*{requestedTerm}"/>
+            </div>
+            <div class="clearfix">
+                <label>Пол</label>
+                <select th:field="*{isFemale}">
+                    <option th:each="dropValue: ${allGenders}"
+                            th:value="${dropValue}"
+                            th:text="${dropValue}"></option>
+                </select>
 
-    <div>
-        <label>Уровень риска профессии</label>
-        <input th:field="*{jobRiskLevel}"/>
-        <select th:field="*{jobRiskLevel}">
-            <option th:each="dropValue: ${allRiskLevels}"
-                    th:value="${dropValue}"
-                    th:text="${dropValue}"></option>
-        </select>
-    </div>
+            </div>
+            <div class="clearfix">
+                <label>Возраст</label>
+                <input type="text" th:field="*{age}"/>
+            </div>
+            <div class="clearfix">
+                <label>Сколько лет вы живёте в своём городе?</label>
+                <input type="text" th:field="*{yearsOfLivingInASinglePlace}"/>
+            </div>
 
-    <div>
-        <label>Вы владеете недвижимостью?</label>
-        <input type="checkbox" th:field="*{hasRealty}"/>
-    </div>
-    <div>
-        <label>У вса есть полис ДМС?</label>
-        <input type="checkbox" th:field="*{hasInsurance}"/>
-    </div>
+            <div class="clearfix">
+                <label>Уровень риска профессии</label>
+                <select th:field="*{jobRiskLevel}">
+                    <option th:each="dropValue: ${allRiskLevels}"
+                            th:value="${dropValue}"
+                            th:text="${dropValue}"></option>
+                </select>
+            </div>
 
-    <div>
-        <label>У вас есть счета в других банках?</label>
-        <input type="checkbox" th:field="*{hasBankAccounts}"/>
-    </div>
+            <div class="clearfix">
+                <label>Вы владеете недвижимостью?</label>
+                <input type="checkbox" th:field="*{hasRealty}"/>
+            </div>
 
-    <div>
-        <label>Ваш работодатель - государственное учреждение?</label>
-        <input th:field="*{isWorkingInSocField}"/>
-    </div>
-    <div>
-        <label>Рабочий стаж (годы):</label>
-        <input th:field="*{workExperience}"/>
-    </div>
-    <div>
-        <label>Зарплата:</label>
-        <input th:field="*{workIncome}"/>
-    </div>
+            <div class="clearfix">
+                <label>У вса есть полис ДМС?</label>
+                <div class="input">
+                    <input type="checkbox" th:field="*{hasInsurance}"/>
+                </div>
 
-    <button type="submit">submit</button>
-</form>
+            </div>
+
+            <div class="clearfix">
+                <label>У вас есть счета в других банках?</label>
+                <div class="input">
+                    <input type="checkbox" th:field="*{hasBankAccounts}"/>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                <label>Ваш работодатель - государственное учреждение?</label>
+                <div class="input">
+                    <input th:field="*{isWorkingInSocField}"/>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                <label>Рабочий стаж (годы):</label>
+                <div class="input">
+                    <input type="text" th:field="*{workExperience}"/>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                <label>Зарплата:</label>
+                <div class="input">
+                    <input type="text" th:field="*{workIncome}"/>
+                </div>
+            </div>
+        </fieldset>
+        <button type="submit">submit</button>
+    </form>
+</div>
 </body>
 </html>

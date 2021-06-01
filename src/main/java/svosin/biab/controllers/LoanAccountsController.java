@@ -43,7 +43,8 @@ public class LoanAccountsController {
     }
 
     @GetMapping("/new")
-    public String showLoanRequestPage() {
+    public String showLoanRequestPage(Model model) {
+        model.addAttribute("req", new LoanRequest());
         return "loanRequest";
     }
 

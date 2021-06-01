@@ -19,11 +19,16 @@ public class LoanRequest {
     Date requestDate;
     Integer requestedSum;
     Integer requestedTerm; // months
+
+    public void setFemale(String g) {
+        isFemale = !g.equals("M");
+    }
+
     /*
-    Быкова Н.Н. Основные методы анализа кредитоспособности заёмщика //
-    Гуманитарные научные исследования. 2017. № 2 [Электронный ресурс].
-    URL: https://human.snauka.ru/2017/02/21757 (дата обращения: 17.05.2021).
-     */
+        Быкова Н.Н. Основные методы анализа кредитоспособности заёмщика //
+        Гуманитарные научные исследования. 2017. № 2 [Электронный ресурс].
+        URL: https://human.snauka.ru/2017/02/21757 (дата обращения: 17.05.2021).
+         */
     Boolean isFemale;
     Integer age;
     Integer yearsOfLivingInASinglePlace;
