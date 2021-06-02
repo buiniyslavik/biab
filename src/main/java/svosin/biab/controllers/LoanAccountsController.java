@@ -57,8 +57,10 @@ public class LoanAccountsController {
 
     @PostMapping("/new")
     public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequestDraftDTO loanRequestInfo, Principal principal) {
-        LoanRequest lr = new LoanRequest(loanRequestInfo, userService.findByUsername(principal.getName()));
-        loanAccountService.assessLoanRequest(lr);
+        Profile currentUser = userService.findByUsername(principal.getName());
+        LoanRequest lr = new LoanRequest(loanRequestInfo, currentUser);
+        var lr2 = loanAccountService.assessLoanRequest(lr);
+        loanAccountService.issueLoan(lr2, "60b3e080d2890e4d70847755");
         return "loanSuccess";
     }
 
