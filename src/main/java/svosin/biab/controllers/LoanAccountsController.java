@@ -59,7 +59,7 @@ public class LoanAccountsController {
     public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequestDraftDTO loanRequestInfo, Principal principal) {
         LoanRequest lr = new LoanRequest(loanRequestInfo, userService.findByUsername(principal.getName()));
         loanAccountService.assessLoanRequest(lr);
-        return "loans";
+        return "loanSuccess";
     }
 
 }

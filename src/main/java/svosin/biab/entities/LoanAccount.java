@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,9 +18,9 @@ public class LoanAccount {
     String id;
 
     Double interestRate;
-    Date openingDate;
-    Date expectedCloseDate;
-    Date nextPaymentDueDate;
+    LocalDate openingDate;
+    LocalDate expectedCloseDate;
+    LocalDate nextPaymentDueDate;
     Money latePaymentPenalty;
 
     Money initialAmount;
@@ -26,11 +28,20 @@ public class LoanAccount {
 
     @DBRef
     Profile owner;
-    public LoanAccount(Double interestRate, Date expectedCloseDate, Money latePaymentPenalty, Money initialAmount) {
+    public LoanAccount(Double interestRate, LocalDate expectedCloseDate, Money latePaymentPenalty, Money initialAmount) {
         this.interestRate = interestRate;
-        this.openingDate = Calendar.getInstance().getTime();
+        this.openingDate = LocalDate.now();
         this.expectedCloseDate = expectedCloseDate;
         this.latePaymentPenalty = latePaymentPenalty;
         this.initialAmount = initialAmount;
     }
+
+    public LoanAccount(LoanRequest loanRequest) {
+        this.openingDate = LocalDate.now();
+        this.expectedCloseDate = this.openingDate.plusMonths(loanRequest.getRequestedTerm());
+        this.latePaymentPenalty = Money.of(Ruble.rub, 1000);
+        this.interestRate = 5.0;
+        this.initialAmount = Money.of(Ruble.rub, loanRequest.getRequestedSum());
+    }
+
 }

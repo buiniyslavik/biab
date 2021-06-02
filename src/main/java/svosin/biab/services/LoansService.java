@@ -12,6 +12,7 @@ import svosin.biab.repos.LoanAccountRepository;
 import svosin.biab.repos.LoanRequestRepository;
 
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class LoansService {
 
     public LoanAccount createLoan(
             Double interestRate,
-            Date expectedCloseDate,
+            LocalDate expectedCloseDate,
             Money latePaymentPenalty,
             Money initialAmount
     ) {
@@ -114,4 +115,8 @@ public class LoansService {
         return request.getIsApproved();
     }
 
+  /*  public LoanAccount createAccountFromRequest(LoanRequest lr) {
+
+    }
+*/
 }
