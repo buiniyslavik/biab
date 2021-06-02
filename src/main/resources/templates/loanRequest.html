@@ -30,7 +30,7 @@
 </div>
 
 <div class="container">
-    <form action="/loan/new" th:object="${req}" method="POST" enctype="utf8">
+    <form action="/loans/new" th:object="${req}" method="POST" enctype="utf8">
         <fieldset>
             <legend>Заявка на кредит</legend>
             <div class="clearfix">
@@ -43,7 +43,7 @@
             </div>
             <div class="clearfix">
                 <label>Пол</label>
-                <select th:field="*{isFemale}">
+                <select th:field="*{gender}">
                     <option th:each="dropValue: ${allGenders}"
                             th:value="${dropValue}"
                             th:text="${dropValue}"></option>
@@ -91,7 +91,7 @@
             <div class="clearfix">
                 <label>Ваш работодатель - государственное учреждение?</label>
                 <div class="input">
-                    <input th:field="*{isWorkingInSocField}"/>
+                    <input type="checkbox" th:field="*{isWorkingInSocField}"/>
                 </div>
             </div>
 

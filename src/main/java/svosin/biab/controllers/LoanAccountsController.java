@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import svosin.biab.entities.LoanAccount;
-import svosin.biab.entities.LoanRequest;
-import svosin.biab.entities.LoanRequestInfo;
-import svosin.biab.entities.Profile;
+import svosin.biab.entities.*;
 
 import svosin.biab.enums.JobRiskLevel;
 import svosin.biab.services.LoansService;
@@ -44,7 +41,7 @@ public class LoanAccountsController {
 
     @GetMapping("/new")
     public String showLoanRequestPage(Model model) {
-        model.addAttribute("req", new LoanRequest());
+        model.addAttribute("req", new LoanRequestDraftDTO());
         return "loanRequest";
     }
 
@@ -55,11 +52,11 @@ public class LoanAccountsController {
 
     @ModelAttribute("allRiskLevels")
     public String[] getAllRiskLevels() {
-        return new String[]{"JOBRISK_HIGH", "JOBRISK_MEDIUM", "JOBRISK_LOW"};
+        return new String[]{"Высокий", "Средний", "Низкий"};
     }
 
     @PostMapping("/new")
-    public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequestInfo loanRequestInfo, Principal principal) {
+    public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequestDraftDTO loanRequestInfo, Principal principal) {
         LoanRequest lr = new LoanRequest(loanRequestInfo, userService.findByUsername(principal.getName()));
         loanAccountService.assessLoanRequest(lr);
         return "loans";

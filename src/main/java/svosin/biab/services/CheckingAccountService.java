@@ -58,4 +58,14 @@ public class CheckingAccountService {
         checkingAccountRepository.save(acc.toPersist());
         return acc.getCurrentBalance();
     }
+
+    public String getBalanceById(String accountToUseId) {
+        return checkingAccountRepository
+                .findById(accountToUseId).orElseThrow()
+                .getCurrentBalance(); // we're all strings here, we don't un-persist
+    }
+
+    public CheckingAccount getById(String accountToUseId) {
+        return new CheckingAccount(checkingAccountRepository.findById(accountToUseId).orElseThrow());
+    }
 }

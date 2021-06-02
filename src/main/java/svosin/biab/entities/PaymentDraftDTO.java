@@ -9,6 +9,8 @@ import svosin.biab.interfaces.MoneyDebitProvider;
 @NoArgsConstructor
 public class PaymentDraftDTO {
     String provider;
+    String accountToUseId;
+    String accountToUseBalance;
     String amount;
     String fee;
     String total;

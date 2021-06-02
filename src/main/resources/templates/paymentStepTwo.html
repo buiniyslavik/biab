@@ -46,10 +46,15 @@
         <p th:text="*{getTotal()}"></p>
         </u>
     </div>
+    <div>
+        <label>Будет списано со счёта</label>
+        <p th:text="*{getAccountToUseId() + '(' + getAccountToUseBalance() + ')'}"></p>
+    </div>
 </div>
 <form action="process" th:object="${payCommand}" method="POST" enctype="utf8">
     <div style="display: none">
     <input name="provider" th:value="${draft.getProvider()}">
+    <input name="accountToUseId" th:value="${draft.getAccountToUseId()}">
     <input name="data" th:value="${draft.getData()}">
     <input name="amount" th:value="${draft.getAmount()}">
     </div>

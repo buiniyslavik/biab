@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import svosin.biab.entities.CheckingAccount;
 import svosin.biab.entities.PaymentDraftDTO;
 import svosin.biab.entities.PaymentRequest;
 import svosin.biab.entities.Profile;
@@ -53,6 +54,11 @@ public class PaymentsController {
                 .newInstance();
         model.addAttribute("provider", provider);
 
+        List<CheckingAccount> userAccounts = checkingAccountService.getCheckingAccountsOfProfile(
+                userService.findByUsername(principal.getName())
+        );
+        model.addAttribute("accounts", userAccounts);
+
         PaymentDraftDTO paymentDraftDTO = new PaymentDraftDTO();
   //      paymentDraftDTO.setProvider(provider.getName());
         model.addAttribute("draft", paymentDraftDTO);
@@ -80,6 +86,7 @@ public class PaymentsController {
         String total = amount.plus(fee).toString();
         draftDTO.setTotal(total);
         draftDTO.setProvider(provider.getName());
+        draftDTO.setAccountToUseBalance(checkingAccountService.getBalanceById(draftDTO.getAccountToUseId()));
         model.addAttribute("draft", draftDTO);
         model.addAttribute("payCommand", new PaymentDraftDTO());
         return "paymentStepTwo";
@@ -92,16 +99,22 @@ public class PaymentsController {
             Principal principal,
             @PathVariable String providerName,
             @ModelAttribute("payCommand") PaymentRequest cmd
-    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    ) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, SecurityException {
         MoneyDebitProvider provider = (MoneyDebitProvider) Class
                 .forName(providerName)
                 .getDeclaredConstructor()
                 .newInstance();
         model.addAttribute("provider", provider);
 
+        CheckingAccount account = checkingAccountService.getById(cmd.getAccountToUseId());
+
+        if(!(account.getOwner().equals(userService.findByUsername(principal.getName())))) {
+            throw new SecurityException("Unauthorized spending attempt");
+        }
+
         if(paymentProcessingService.payToProvider(
                 provider,
-                checkingAccountService.getCheckingAccountsOfProfile(userService.findByUsername(principal.getName())).get(0),
+                account,
                 Money.parse("RUB "+ cmd.getAmount()),
                 cmd.getData()
         )) return "success";

@@ -1,5 +1,6 @@
 package svosin.biab.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class LoansService {
     @Autowired
     LoanAccountRepository loanAccountRepository;
@@ -103,9 +105,12 @@ public class LoansService {
         // needs fixup that would factor the interest rate in
 
 
-        if( currentRating >= 1.25 && allowedSum < request.getRequestedSum() )
+        if( currentRating >= 1.25 && allowedSum >= request.getRequestedSum() )
             request.setIsApproved(true);
+
         loanRequestRepository.save(request);
+        log.info("Loan request approval: " + request.getIsApproved().toString() + ", rating is "+ currentRating
+        + ", allowed sum is " + allowedSum);
         return request.getIsApproved();
     }
 

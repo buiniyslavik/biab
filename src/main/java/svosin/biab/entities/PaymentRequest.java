@@ -8,6 +8,7 @@ import svosin.biab.interfaces.MoneyDebitProvider;
 @Data
 @NoArgsConstructor
 public class PaymentRequest {
+    String accountToUseId;
     String provider;
     String amount;
     String data;

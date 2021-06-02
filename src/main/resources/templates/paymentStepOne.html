@@ -42,6 +42,14 @@
     </div>
 </div>
 <form action="confirm" th:object="${draft}" method="POST" enctype="utf8">
+    <div>
+        <label>Списать с:</label>
+        <select class="xlarge" th:field="*{accountToUseId}">
+            <option th:each="dropValue: ${accounts}"
+                    th:value="${dropValue.getId()}"
+                    th:text="${dropValue.getId() + '(' + dropValue.getCurrentBalance().toString() +')'}"></option>
+        </select>
+    </div>
 
     <div>
         <label>Номер счёта</label>

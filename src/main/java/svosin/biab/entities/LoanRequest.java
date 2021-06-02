@@ -72,14 +72,18 @@ public class LoanRequest {
         this.workExperience = workExperience;
         this.workIncome = workIncome;
     }
-    public LoanRequest(LoanRequestInfo lri, Profile owner) {
+    public LoanRequest(LoanRequestDraftDTO lri, Profile owner) {
         this.requesterProfile = owner;
         this.requestedSum = lri.requestedSum;
         this.requestedTerm = lri.requestedTerm;
         this.isFemale = lri.gender.equals("Ж");
         this.age = lri.age;
         this.yearsOfLivingInASinglePlace = lri.yearsOfLivingInASinglePlace;
-        this.jobRiskLevel = lri.jobRiskLevel;
+        switch (lri.getJobRiskLevel()) {
+            case "Высокий" -> this.jobRiskLevel = JobRiskLevel.JOBRISK_HIGH;
+            case "Средний" -> this.jobRiskLevel = JobRiskLevel.JOBRISK_MEDIUM;
+            case "Низкий" -> this.jobRiskLevel = JobRiskLevel.JOBRISK_LOW;
+        }
         this.hasRealty = lri.hasRealty;
         this.hasBankAccounts = lri.hasBankAccounts;
         this.hasInsurance = lri.hasInsurance;
