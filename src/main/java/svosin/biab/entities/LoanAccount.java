@@ -1,12 +1,16 @@
 package svosin.biab.entities;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.money.Money;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import svosin.biab.persistEntities.PersistLoanAccount;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -14,11 +18,12 @@ import java.util.Date;
 
 @Data
 @Document
+@Slf4j
 public class LoanAccount {
     @Id
     String id;
 
-    Double interestRate;
+    BigDecimal interestRate;
     LocalDate openingDate;
     LocalDate expectedCloseDate;
     LocalDate nextPaymentDueDate;
@@ -26,11 +31,19 @@ public class LoanAccount {
 
     Money initialAmount = Money.zero(Ruble.rub);
     Money repaidAmount = Money.zero(Ruble.rub);
+    Money monthlyPayment = Money.zero(Ruble.rub);
+
+    Money accumulatedPenalties = Money.zero(Ruble.rub);
+    Money accumulatedInterest = Money.zero(Ruble.rub);
+    Boolean paymentWasMissed = true;
+
+    Boolean isReadyForDeletion = false;
 
     @DBRef
     Profile owner;
+
     public LoanAccount(Double interestRate, LocalDate expectedCloseDate, Money latePaymentPenalty, Money initialAmount) {
-        this.interestRate = interestRate;
+        this.interestRate = BigDecimal.valueOf(interestRate);
         this.openingDate = LocalDate.now();
         this.expectedCloseDate = expectedCloseDate;
         this.latePaymentPenalty = latePaymentPenalty;
@@ -42,31 +55,85 @@ public class LoanAccount {
         this.expectedCloseDate = this.openingDate.plusMonths(loanRequest.getRequestedTerm());
         this.nextPaymentDueDate = this.openingDate.plusMonths(1);
         this.latePaymentPenalty = Money.of(Ruble.rub, 1000);
-        this.interestRate = 5.0;
+        this.interestRate = BigDecimal.valueOf(5.0);
         this.initialAmount = Money.of(Ruble.rub, loanRequest.getRequestedSum());
+        this.monthlyPayment = initialAmount.dividedBy(new BigDecimal(loanRequest.getRequestedTerm()), RoundingMode.HALF_UP);
+        this.paymentWasMissed = false;
     }
 
     public PersistLoanAccount toPersist() {
-        return new PersistLoanAccount(id, interestRate, openingDate, expectedCloseDate, nextPaymentDueDate,
-                latePaymentPenalty.toString(), initialAmount.toString(), repaidAmount.toString(), owner);
+        return new PersistLoanAccount(id, interestRate.toString(), openingDate, expectedCloseDate, nextPaymentDueDate,
+                latePaymentPenalty.toString(), initialAmount.toString(), repaidAmount.toString(), monthlyPayment.toString(),
+                accumulatedPenalties.toString(), accumulatedInterest.toString(), paymentWasMissed, owner);
     }
 
     public LoanAccount(PersistLoanAccount p) {
         id = p.getId();
-        interestRate = p.getInterestRate();
+        interestRate = BigDecimal.valueOf(Double.parseDouble(p.getInterestRate()));
         openingDate = p.getOpeningDate();
         expectedCloseDate = p.getExpectedCloseDate();
         nextPaymentDueDate = p.getNextPaymentDueDate();
-        if(p.getLatePaymentPenalty() != null)
-        latePaymentPenalty = Money.parse(p.getLatePaymentPenalty());
+        if (p.getLatePaymentPenalty() != null)
+            latePaymentPenalty = Money.parse(p.getLatePaymentPenalty());
         else latePaymentPenalty = Money.zero(Ruble.rub);
-        if(p.getInitialAmount() != null)
-        initialAmount = Money.parse(p.getInitialAmount());
+
+        if (p.getInitialAmount() != null)
+            initialAmount = Money.parse(p.getInitialAmount());
         else initialAmount = Money.zero(Ruble.rub);
-        if(p.getRepaidAmount() != null)
-        repaidAmount = Money.parse(p.getRepaidAmount());
+
+        if (p.getRepaidAmount() != null)
+            repaidAmount = Money.parse(p.getRepaidAmount());
         else repaidAmount = Money.zero(Ruble.rub);
+
+        if (p.getMonthlyPayment() != null)
+            monthlyPayment = Money.parse(p.getMonthlyPayment());
+        else monthlyPayment = Money.zero(Ruble.rub);
+
+        if (p.getAccumulatedPenalties() != null)
+            accumulatedPenalties = Money.parse(p.getAccumulatedPenalties());
+        else accumulatedPenalties = Money.zero(Ruble.rub);
+
+        if (p.getAccumulatedInterest() != null)
+            accumulatedInterest = Money.parse(p.getAccumulatedInterest());
+        else accumulatedInterest = Money.zero(Ruble.rub);
+
+        paymentWasMissed = p.getPaymentWasMissed();
+
         owner = p.getOwner();
+    }
+
+    public void processInterest() {
+        log.info("loan " + id + ": processing interest");
+        if (paymentWasMissed) {
+            accumulatedPenalties = accumulatedPenalties.plus(latePaymentPenalty);
+            log.info("loan " + id + ": penalty incurred");
+        }
+        Money remainingAmount = initialAmount.plus(accumulatedInterest.plus(accumulatedPenalties)).minus(repaidAmount);
+        Money currentInterest = remainingAmount.multipliedBy(
+                (
+                        interestRate.divide(
+                                new BigDecimal(100), RoundingMode.HALF_UP
+                        ).divide(
+                                new BigDecimal(365), RoundingMode.HALF_UP
+                        ).multiply(
+                                new BigDecimal(LocalDate.EPOCH.lengthOfMonth())
+                        )
+                ), RoundingMode.HALF_UP
+        );
+        accumulatedInterest = accumulatedInterest.plus(currentInterest);
+        nextPaymentDueDate = nextPaymentDueDate.plusMonths(1);
+        paymentWasMissed = true;
+    }
+
+    public void processPayment(Money amount) {
+        log.info("loan " + id + ": processing payment");
+        repaidAmount = repaidAmount.plus(amount);
+        if(monthlyPayment.isLessThan(amount) || monthlyPayment.isEqual(amount)) {
+            paymentWasMissed = false;
+        }
+        if(repaidAmount.isGreaterThan(initialAmount.plus(accumulatedPenalties).plus(accumulatedInterest)))
+                isReadyForDeletion = true;
+
     }
 
 }

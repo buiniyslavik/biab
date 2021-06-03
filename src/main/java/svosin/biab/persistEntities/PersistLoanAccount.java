@@ -20,7 +20,7 @@ public class PersistLoanAccount {
     @Id
     String id;
 
-    Double interestRate;
+    String interestRate;
     LocalDate openingDate;
     LocalDate expectedCloseDate;
     LocalDate nextPaymentDueDate;
@@ -28,6 +28,12 @@ public class PersistLoanAccount {
 
     String initialAmount;
     String repaidAmount;
+    String monthlyPayment;
+    String accumulatedPenalties;
+    String accumulatedInterest;
+    Boolean paymentWasMissed;
 
+    //TODO refactor this
+    @DBRef
     Profile owner;
 }

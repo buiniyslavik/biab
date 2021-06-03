@@ -3,6 +3,7 @@ package svosin.biab.controllers;
 import lombok.SneakyThrows;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,9 @@ public class PaymentsController {
 
     @Autowired
     PaymentProcessingService paymentProcessingService;
+
+    @Autowired
+    private AutowireCapableBeanFactory autowireCapableBeanFactory;
 
     @GetMapping("/all")
     public String showAllPaymentProviders(Model model, Principal principal) {
@@ -104,6 +108,7 @@ public class PaymentsController {
                 .forName(providerName)
                 .getDeclaredConstructor()
                 .newInstance();
+        autowireCapableBeanFactory.autowireBean(provider);
         model.addAttribute("provider", provider);
 
         CheckingAccount account = checkingAccountService.getById(cmd.getAccountToUseId());

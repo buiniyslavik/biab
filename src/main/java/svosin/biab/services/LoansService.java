@@ -57,6 +57,11 @@ public class LoansService {
         return loanId;
     }
 
+    public LoanAccount refreshLoan(LoanAccount loanId) {
+        loanAccountRepository.save(loanId.toPersist());
+        return loanId;
+    }
+
     //--------------------
 
     public LoanRequest createLoanRequest(
@@ -91,6 +96,14 @@ public class LoansService {
                         workIncome
                 )
         );
+    }
+
+    public LoanAccount getLoanById(String id) {
+        return new LoanAccount(loanAccountRepository.findById(id).orElseThrow());
+    }
+
+    public void deleteLoan(String id) {
+        loanAccountRepository.deleteById(id);
     }
 
     public LoanRequest assessLoanRequest(LoanRequest request) {
@@ -139,6 +152,13 @@ public class LoansService {
                 loanAccount.getInitialAmount().toString(),
                 "Выдача кредита");
         loanAccountRepository.save(loanAccount.toPersist());
+    }
+
+    public List<LoanAccount> getAllByDueDate(LocalDate date) {
+        var plist = loanAccountRepository.findAllByNextPaymentDueDate(date);
+        var acclist = new ArrayList<LoanAccount>();
+        plist.forEach(p -> acclist.add(new LoanAccount(p)));
+        return acclist;
     }
 
 }

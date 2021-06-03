@@ -1,5 +1,6 @@
 package svosin.biab.services;
 
+import svosin.biab.debitProviders.LoanPayProvider;
 import svosin.biab.debitProviders.NullDebitProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.money.Money;
@@ -22,6 +23,9 @@ public class PaymentProcessingService {
     @Autowired
     CheckingAccountService checkingAccountService;
 
+    @Autowired
+    LoanPayProvider loanPayProvider;
+
     public List<MoneyCreditProvider> getAllCreditProviders() {
         return Stream.of(
                 new NullCreditProvider()
@@ -30,7 +34,8 @@ public class PaymentProcessingService {
 
     public List<MoneyDebitProvider> getAllDebitProviders() {
         return Stream.of(
-                new NullDebitProvider()
+                new NullDebitProvider(),
+                loanPayProvider
         ).collect(Collectors.toList());
     }
 
