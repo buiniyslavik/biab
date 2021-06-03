@@ -24,6 +24,7 @@ public class LoanRequestDraftDTO {
     Boolean isWorkingInSocField;
     Integer workExperience;
     Integer workIncome;
+    String payToAcc;
 
    // Double extCorrectionFactor = 0.0;
 

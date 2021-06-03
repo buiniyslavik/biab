@@ -108,6 +108,15 @@
                     <input type="text" th:field="*{workIncome}"/>
                 </div>
             </div>
+
+            <div>
+                <label>Зачислить на:</label>
+                <select class="xlarge" th:field="*{payToAcc}">
+                    <option th:each="dropValue: ${currCheckAcc}"
+                            th:value="${dropValue.getId()}"
+                            th:text="${dropValue.getId() + '(' + dropValue.getCurrentBalance().toString() +')'}"></option>
+                </select>
+            </div>
         </fieldset>
         <button type="submit">submit</button>
     </form>

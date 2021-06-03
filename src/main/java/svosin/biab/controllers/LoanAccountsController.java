@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import svosin.biab.entities.*;
 
 import svosin.biab.enums.JobRiskLevel;
+import svosin.biab.services.CheckingAccountService;
 import svosin.biab.services.LoansService;
 import svosin.biab.services.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static svosin.biab.enums.JobRiskLevel.JOBRISK_HIGH;
@@ -25,6 +27,10 @@ import static svosin.biab.enums.JobRiskLevel.JOBRISK_HIGH;
 public class LoanAccountsController {
     @Autowired
     LoansService loanAccountService;
+
+    @Autowired
+    CheckingAccountService checkingAccountService;
+
     @Autowired
     UserService userService;
 
@@ -40,14 +46,18 @@ public class LoanAccountsController {
     }
 
     @GetMapping("/new")
-    public String showLoanRequestPage(Model model) {
+    public String showLoanRequestPage(Model model, Principal principal) {
         model.addAttribute("req", new LoanRequestDraftDTO());
+
+        model.addAttribute("currCheckAcc", checkingAccountService.getCheckingAccountsOfProfile(
+                userService.findByUsername(principal.getName()))
+        );
         return "loanRequest";
     }
 
     @ModelAttribute("allGenders")
     public String[] getAllGenders() {
-        return new String[]{ "М", "Ж" };
+        return new String[]{"М", "Ж"};
     }
 
     @ModelAttribute("allRiskLevels")
@@ -55,12 +65,14 @@ public class LoanAccountsController {
         return new String[]{"Высокий", "Средний", "Низкий"};
     }
 
+
+
     @PostMapping("/new")
     public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequestDraftDTO loanRequestInfo, Principal principal) {
         Profile currentUser = userService.findByUsername(principal.getName());
         LoanRequest lr = new LoanRequest(loanRequestInfo, currentUser);
         var lr2 = loanAccountService.assessLoanRequest(lr);
-        loanAccountService.issueLoan(lr2, "60b3e080d2890e4d70847755");
+        loanAccountService.issueLoan(lr2, loanRequestInfo.getPayToAcc());
         return "loanSuccess";
     }
 
