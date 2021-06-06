@@ -34,7 +34,7 @@ public class SignupController {
             Errors errors)
     {
         userService.createProfile(userDTO);
-        return "login";
+        return "redirect: login";
     }
 
 }

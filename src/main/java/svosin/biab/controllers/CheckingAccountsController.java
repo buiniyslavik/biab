@@ -39,7 +39,8 @@ public class CheckingAccountsController {
         Profile currentUser = userService.findByUsername(principal.getName());
         checkingAccountService.createCheckingAccount(currentUser);
         //return "checkingAccounts";
-        return showAllCheckingAccounts(model, principal);
+        //return showAllCheckingAccounts(model, principal);
+        return "redirect:all";
     }
 
 }

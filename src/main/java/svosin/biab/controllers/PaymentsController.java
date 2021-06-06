@@ -122,7 +122,7 @@ public class PaymentsController {
                 account,
                 Money.parse("RUB "+ cmd.getAmount()),
                 cmd.getData()
-        )) return "success";
+        )) return "redirect:/start";
         else return "fail";
     }
 

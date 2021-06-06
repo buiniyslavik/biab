@@ -68,12 +68,17 @@ public class LoanAccountsController {
 
 
     @PostMapping("/new")
-    public String processLoanRequest(@ModelAttribute("req") @Valid LoanRequestDraftDTO loanRequestInfo, Principal principal) {
+    public String processLoanRequest(
+            @ModelAttribute("req") @Valid LoanRequestDraftDTO loanRequestInfo,
+            Principal principal,
+            Model model
+    ) {
         Profile currentUser = userService.findByUsername(principal.getName());
         LoanRequest lr = new LoanRequest(loanRequestInfo, currentUser);
         var lr2 = loanAccountService.assessLoanRequest(lr);
         loanAccountService.issueLoan(lr2, loanRequestInfo.getPayToAcc());
-        return "loanSuccess";
+       // return showAllLoans(model, principal);
+        return "redirect:all";
     }
 
 }
