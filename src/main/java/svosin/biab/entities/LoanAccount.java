@@ -39,6 +39,8 @@ public class LoanAccount {
 
     Boolean isReadyForDeletion = false;
 
+    Money lastInterest;
+
     @DBRef
     Profile owner;
 
@@ -126,9 +128,9 @@ public class LoanAccount {
 
         log.info(interestRate.divide(
                 new BigDecimal("100.0"), RoundingMode.HALF_UP
-        ).toString())
+        ).toString());
 
-        ;
+        lastInterest = currentInterest;
 
         accumulatedInterest = accumulatedInterest.plus(currentInterest);
         log.info("ci " + currentInterest.toString());

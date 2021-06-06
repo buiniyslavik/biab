@@ -43,14 +43,14 @@
 
     <tbody>
     <tr th:each="acc: ${lAccounts}">
-        <td th:text="${acc.getId()}">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-        <td th:text="${acc.getOutstandingAmount().toString()}">over 9000</td>
-        <td th:text="${acc.getInitialAmount().toString()}">over 9000</td>
-        <td th:text="${acc.getRepaidAmount().toString()}">$300</td>
-        <td th:text="${acc.getInterestRate().toString()}">0%</td>
-        <td th:text="${acc.getAccumulatedInterest().toString()}">0%</td>
-        <td th:text="${acc.getAccumulatedPenalties().toString()}">0%</td>
-        <td th:text="${acc.getNextPaymentDueDate().toString()}">ещё вчера</td>
+        <td th:text="${acc.getId()}"></td>
+        <td th:text="${acc.getOutstandingAmount().toString()}"></td>
+        <td th:text="${acc.getInitialAmount().toString()}"></td>
+        <td th:text="${acc.getRepaidAmount().toString()}"></td>
+        <td th:text="${acc.getInterestRate().toString()}"></td>
+        <td th:text="${acc.getAccumulatedInterest().toString()}"></td>
+        <td th:text="${acc.getAccumulatedPenalties().toString()}"></td>
+        <td th:text="${acc.getNextPaymentDueDate().toString()}"></td>
     </tr>
     </tbody>
 

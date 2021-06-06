@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
+import svosin.biab.enums.LogOperationType;
 import svosin.biab.repos.LoanAccountRepository;
 import svosin.biab.services.LoansService;
+import svosin.biab.services.PaymentLogService;
 
 import java.time.LocalDate;
 
@@ -22,6 +24,9 @@ import static svosin.biab.config.QuartzConfiguration.CONTEXT_KEY;
 public class LoansProcessInterest extends QuartzJobBean {
     @Autowired
     LoansService loansService;
+
+    @Autowired
+    PaymentLogService paymentLogService;
 
     private ApplicationContext applicationContext;
 
@@ -45,6 +50,12 @@ public class LoansProcessInterest extends QuartzJobBean {
             accsForToday.forEach(acc -> {
                 acc.processInterest();
                 loansService.save(acc);
+                paymentLogService.logPayment(
+                        acc.getOwner().getUserId(),
+                        acc.getId(),
+                        LogOperationType.DEBIT,
+                        acc.getLastInterest().toString(),
+                        "Начисление процентов");
             });
         } catch (SchedulerException e) {
             e.printStackTrace();
