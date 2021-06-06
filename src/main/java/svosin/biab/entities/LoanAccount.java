@@ -69,7 +69,8 @@ public class LoanAccount {
 
     public LoanAccount(PersistLoanAccount p) {
         id = p.getId();
-        interestRate = BigDecimal.valueOf(Double.parseDouble(p.getInterestRate()));
+        interestRate = new BigDecimal(p.getInterestRate());
+        interestRate = interestRate.setScale(5, RoundingMode.HALF_UP);
         openingDate = p.getOpeningDate();
         expectedCloseDate = p.getExpectedCloseDate();
         nextPaymentDueDate = p.getNextPaymentDueDate();
@@ -109,18 +110,29 @@ public class LoanAccount {
             log.info("loan " + id + ": penalty incurred");
         }
         Money remainingAmount = initialAmount.plus(accumulatedInterest.plus(accumulatedPenalties)).minus(repaidAmount);
+        log.info("remainingAmount " + remainingAmount.toString());
+        log.info("irate " + interestRate.toString());
         Money currentInterest = remainingAmount.multipliedBy(
                 (
                         interestRate.divide(
-                                new BigDecimal(100), RoundingMode.HALF_UP
+                                new BigDecimal("100.000"), RoundingMode.HALF_UP
                         ).divide(
-                                new BigDecimal(365), RoundingMode.HALF_UP
+                                new BigDecimal("365.000"), RoundingMode.HALF_UP
                         ).multiply(
-                                new BigDecimal(LocalDate.EPOCH.lengthOfMonth())
+                                new BigDecimal(LocalDate.now().lengthOfMonth())
                         )
                 ), RoundingMode.HALF_UP
         );
+
+        log.info(interestRate.divide(
+                new BigDecimal("100.0"), RoundingMode.HALF_UP
+        ).toString())
+
+        ;
+
         accumulatedInterest = accumulatedInterest.plus(currentInterest);
+        log.info("ci " + currentInterest.toString());
+        log.info("ai " + accumulatedInterest.toString());
         nextPaymentDueDate = nextPaymentDueDate.plusMonths(1);
         paymentWasMissed = true;
     }
@@ -134,6 +146,10 @@ public class LoanAccount {
         if(repaidAmount.isGreaterThan(initialAmount.plus(accumulatedPenalties).plus(accumulatedInterest)))
                 isReadyForDeletion = true;
 
+    }
+
+    public Money getOutstandingAmount() {
+        return initialAmount.plus(accumulatedPenalties).plus(accumulatedInterest);
     }
 
 }

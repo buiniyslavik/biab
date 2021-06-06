@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface LoanAccountRepository extends MongoRepository<PersistLoanAccount, String> {
     List<PersistLoanAccount> findAllByOwner(Profile owner);
-    List<PersistLoanAccount> findAllByNextPaymentDueDate(LocalDate date);
+    List<PersistLoanAccount> findAllByNextPaymentDueDate(LocalDate localDate);
 }

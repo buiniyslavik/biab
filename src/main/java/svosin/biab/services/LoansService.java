@@ -161,4 +161,9 @@ public class LoansService {
         return acclist;
     }
 
+    public void save(LoanAccount loanAccount)
+    {
+        loanAccountRepository.save(loanAccount.toPersist());
+    }
+
 }

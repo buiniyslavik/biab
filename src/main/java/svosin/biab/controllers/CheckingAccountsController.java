@@ -24,7 +24,7 @@ public class CheckingAccountsController {
     UserService userService;
 
     @GetMapping("/all")
-    public String showAllCheckingAccounts(WebRequest request, Model model, Principal principal) {
+    public String showAllCheckingAccounts(Model model, Principal principal) {
         Profile currentUser = userService.findByUsername(principal.getName());
         model.addAttribute("currUser", currentUser);
         List<CheckingAccount> checkingAccounts = checkingAccountService.getCheckingAccountsOfProfile(currentUser);
@@ -35,10 +35,11 @@ public class CheckingAccountsController {
     }
 
     @PostMapping("/new")
-    public String createCheckingAccount(Principal principal) {
+    public String createCheckingAccount(Principal principal, Model model) {
         Profile currentUser = userService.findByUsername(principal.getName());
         checkingAccountService.createCheckingAccount(currentUser);
-        return "checkingAccounts";
+        //return "checkingAccounts";
+        return showAllCheckingAccounts(model, principal);
     }
 
 }
