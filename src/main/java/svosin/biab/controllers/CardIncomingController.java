@@ -1,5 +1,6 @@
 package svosin.biab.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Pair;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 
 @RequestMapping(path = "/cardapi", produces = "application/json;charset=UTF-8")
 @RestController
+@Slf4j
 public class CardIncomingController {
     @Autowired
     PaymentProcessingService paymentProcessingService;
@@ -32,7 +34,9 @@ public class CardIncomingController {
 
     @PostMapping(value = "/payment", consumes = "application/json")
     public Pair<String, Boolean> processCardPayment(@RequestBody @Valid SignedCardPaymentRequest signedRequest) {
+
         CardPaymentRequest request = signedRequest.getRequest();
+        log.info(request.toString());
         String cardNumber = request.getCardNumber();
         String merchant = request.getMerchantName();
         Money amount = Money.parse(request.getAmount());
