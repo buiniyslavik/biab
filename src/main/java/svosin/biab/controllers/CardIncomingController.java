@@ -11,6 +11,7 @@ import svosin.biab.entities.Card;
 import svosin.biab.entities.CardPaymentRequest;
 import svosin.biab.entities.SignedCardPaymentRequest;
 import svosin.biab.services.CardsService;
+import svosin.biab.services.CheckingAccountService;
 import svosin.biab.services.KeystoreService;
 import svosin.biab.services.PaymentProcessingService;
 
@@ -25,6 +26,9 @@ public class CardIncomingController {
     CardsService cardsService;
     @Autowired
     KeystoreService keystoreService;
+    @Autowired
+    CheckingAccountService checkingAccountService;
+
 
     @PostMapping(value = "/payment", consumes = "application/json")
     public Pair<String, Boolean> processCardPayment(@RequestBody @Valid SignedCardPaymentRequest signedRequest) {
@@ -39,7 +43,9 @@ public class CardIncomingController {
                 sig
         )) {
             Card card = cardsService.getCardByNumber(cardNumber);
-            paymentProcessingService.payCard(merchant, card.getAssociatedAccount(), amount,
+            paymentProcessingService.payCard(merchant,
+                    checkingAccountService.getById(card.getAssociatedAccount()),
+                    amount,
                     "*"+cardNumber.substring(11));
             return new Pair<>("ID GOES HERE", true);
         }

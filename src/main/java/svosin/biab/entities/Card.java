@@ -3,29 +3,34 @@ package svosin.biab.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.security.PublicKey;
 import java.util.Random;
 
 @Data
-@NoArgsConstructor
 @Document
 public class Card {
     @Id
     String id;
+    @Field("cardNumber")
     String cardNumber;
 
-    @DBRef
-    CheckingAccount associatedAccount;
-    @DBRef
-    Profile associatedProfile;
 
-    PublicKey publicKey;
+    @Field("associatedAccount")
+    String associatedAccount;
+
+    @Field("associatedProfile")
+    String associatedProfile;
+
+    @Field
+    String publicKey;
     //we store it in a different place for now
 
-    public Card(Card card, PublicKey publicKey) {
+    public Card(Card card, String publicKey) {
         this.id = card.id;
         this.cardNumber = card.cardNumber;
         this.associatedAccount = card.associatedAccount;
@@ -34,8 +39,8 @@ public class Card {
     }
 
     public Card(CheckingAccount acc, Profile profile) {
-        this.associatedAccount = acc;
-        this.associatedProfile = profile;
+        this.associatedAccount = acc.getId();
+        this.associatedProfile = profile.getUserId();
         // gen CC num
 
         // The number of random digits that we need to generate is equal to the
@@ -57,6 +62,7 @@ public class Card {
         this.cardNumber = builder.toString();
 
     }
+
     private int getCheckDigit(String number) {
 
         // Luhn algo
@@ -81,4 +87,12 @@ public class Card {
         return ((mod == 0) ? 0 : 10 - mod);
     }
 
+
+    @PersistenceConstructor
+    private Card(String cardNumber, String associatedAccount, String associatedProfile, String publicKey) {
+        this.cardNumber = cardNumber;
+        this.associatedAccount = associatedAccount;
+        this.associatedProfile = associatedProfile;
+        this.publicKey = publicKey;
+    }
 }

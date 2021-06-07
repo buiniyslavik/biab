@@ -6,59 +6,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import svosin.biab.entities.Card;
-import svosin.biab.entities.CardKey;
-import svosin.biab.repos.CardKeysRepository;
+import svosin.biab.repos.CardRepository;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.security.*;
+import java.util.Arrays;
 
 @Service
 public class KeystoreService {
     @Autowired
-    CardKeysRepository cardKeysRepository;
-
-    //    private KeyStore keyStore;
-/*
-    @SneakyThrows
-    public KeystoreService() {
-        keyStore = KeyStore.getInstance("pcks12");
-        char[] pwdArray = "CHANGEME".toCharArray();
-        try {
-            keyStore.load(new FileInputStream("cardsKeyStore.pkcs12"), pwdArray);
-        } catch(FileNotFoundException e) {
-            keyStore.load(null, pwdArray);
-        }
-        try (FileOutputStream fos = new FileOutputStream("cardsKeyStore.pkcs12")) {
-            keyStore.store(fos, pwdArray);
-        }
-    }
-*/
-    @SneakyThrows
-    public PrivateKey generateRsaKeyPair(String forCardId) {
-        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(2048);
-        KeyPair keyPair = kpg.generateKeyPair();
-        cardKeysRepository.save(new CardKey(keyPair.getPublic(), forCardId));
-        return keyPair.getPrivate();
-    }
+    CardRepository cardRepository;
 
     @SneakyThrows
     public Pair<Card, PrivateKey> createCardKey(Card card) {
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
         kpg.initialize(2048);
         KeyPair keyPair = kpg.generateKeyPair();
-        Card card1 = new Card(card, keyPair.getPublic());
+        Card card1 = new Card(card, Arrays.toString(keyPair.getPublic().getEncoded()));
         //cardKeysRepository.save(new CardKey(keyPair.getPublic(), forCardId));
         return new Pair<Card, PrivateKey>(card1, keyPair.getPrivate());
     }
 
     @SneakyThrows
     public boolean checkSignature(String forCardId, String data, String sig) {
-        PublicKey publicKey = cardKeysRepository.getByCard(forCardId).getPublicKey();
+        PublicKey key = new PublicKey() {
+            @Override
+            public String getAlgorithm() {
+                return "RSA";
+            }
+
+            @Override
+            public String getFormat() {
+                return "X.509";
+            }
+
+            @Override
+            public byte[] getEncoded() {
+                return cardRepository.getById(forCardId).getPublicKey().getBytes();
+            }
+        };
+
+
         Signature signature = Signature.getInstance("SHA256withRSA");
-        signature.initVerify(publicKey);
+        signature.initVerify(key);
         signature.update(data.getBytes());
         return signature.verify(sig.getBytes());
 

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import svosin.biab.entities.Card;
 import svosin.biab.entities.CheckingAccount;
 import svosin.biab.entities.Profile;
-import svosin.biab.repos.CardKeysRepository;
 import svosin.biab.repos.CardRepository;
 
 import java.security.PrivateKey;
@@ -30,6 +29,6 @@ public class CardsService {
         return cardRepository.getByCardNumber(number);
     }
     public List<Card> getProfileCardList(Profile profile) {
-        return cardRepository.getAllByAssociatedProfile(profile);
+        return cardRepository.getAllByAssociatedProfile(profile.getUserId());
     }
 }

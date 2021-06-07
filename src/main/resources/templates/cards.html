@@ -32,15 +32,13 @@
     <tr>
         <td>Номер карты</td>
         <td>Номер счёта</td>
-        <td>Баланс</td>
     </tr>
     </thead>
 
     <tbody>
     <tr th:each="acc: ${cardList}">
         <td th:text="${acc.getId()}"></td>
-        <td th:text="${acc.getAssociatedAccount().getId()}"></td>
-        <td th:text="${acc.getAssociatedAccount().getCurrentBalance()}"></td>
+        <td th:text="${acc.getAssociatedAccount()}"></td>
     </tr>
     </tbody>
 
