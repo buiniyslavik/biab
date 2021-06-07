@@ -13,7 +13,7 @@
             <h3><a class="logo" href="/start">Тест-банк</a></h3>
             <ul>
                 <li><a href="/checking/all">Счета</a></li>
-                <li><a href="/cards/all">Карты</a></li>
+                <li class="active"><a href="/cards/all">Карты</a></li>
                 <li><a href="/pay/all">Платежи</a></li>
                 <li><a href="/loans/all">Кредиты</a></li>
                 <li><a href="/log/all">История</a></li>
@@ -22,12 +22,19 @@
     </div>
 </div>
 
-<h1>Главная страница</h1>
-<h2 th:text="${currUser}">ФИО</h2>
-<a href="/checking/all">Счета</a>
-<a href="">Карты</a>
-<a href="/loans/all">Кредиты</a>
-<a href="/pay/all">Платежи</a>
-<a href="/log/all">История</a>
+<h1>Выпуск карты</h1>
+
+<form action="new" th:object="${draft}" method="POST" enctype="utf8">
+    <div>
+        <label>Выпустить для:</label>
+        <select class="xlarge" th:field="*{accountToUseId}">
+            <option th:each="dropValue: ${accounts}"
+                    th:value="${dropValue.getId()}"
+                    th:text="${dropValue.getId() + '(' + dropValue.getCurrentBalance().toString() +')'}"></option>
+        </select>
+    </div>
+
+    <button class="btn primary" type="submit">Выпустить</button>
+</form>
 </body>
 </html>

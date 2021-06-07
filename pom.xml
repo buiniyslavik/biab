@@ -101,7 +101,11 @@
             <artifactId>spring-context-support</artifactId>
             <version>5.2.10.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+        </dependency>
 
     </dependencies>
 

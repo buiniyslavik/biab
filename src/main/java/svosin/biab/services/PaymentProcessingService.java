@@ -59,6 +59,21 @@ public class PaymentProcessingService {
         }
         return true;
     }
+    public Boolean payCard(String merchant, CheckingAccount payer, Money amount, String data) {
+        try {
+            checkingAccountService.debitCheckingAccount(payer.getId(), amount,
+                    merchant + " / " + amount.toString() + " / " + data);
+        }
+        catch (OutOfFundsException e) {
+            return false;
+        }
+        /*
+        here we would have code that signals the bank to send out the actual money,
+        but we're just mock bank, so it's not here
+         */
+        return true;
+    }
+
 
     public Boolean fundAccount(MoneyCreditProvider provider, CheckingAccount payee, Money amount) {
         if(provider.processCredit(amount)) {

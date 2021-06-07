@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Счета</title>
+    <title>Карты</title>
     <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
     <style>
         body { padding-top: 70px; }
@@ -15,8 +15,8 @@
         <div class="container fixed">
             <h3><a class="logo" href="/start">Тест-банк</a></h3>
             <ul>
-                <li class="active"><a href="/checking/all">Счета</a></li>
-                <li><a href="/cards/all">Карты</a></li>
+                <li><a href="/checking/all">Счета</a></li>
+                <li class="active"><a href="/cards/all">Карты</a></li>
                 <li><a href="/pay/all">Платежи</a></li>
                 <li><a href="/loans/all">Кредиты</a></li>
                 <li><a href="/log/all">История</a></li>
@@ -25,26 +25,28 @@
     </div>
 </div>
 
-<h1>Открытые счета</h1>
-<h2 th:if="${#lists.isEmpty(chkAccounts)}">Открытых счетов нет!</h2>
-<table class="common-table" th:unless="${#lists.isEmpty(chkAccounts)}">
+<h1>Карты</h1>
+<h2 th:if="${#lists.isEmpty(cardList)}">Открытых счетов нет!</h2>
+<table class="common-table" th:unless="${#lists.isEmpty(cardList)}">
     <thead>
     <tr>
+        <td>Номер карты</td>
         <td>Номер счёта</td>
         <td>Баланс</td>
     </tr>
     </thead>
 
     <tbody>
-    <tr th:each="acc: ${chkAccounts}">
+    <tr th:each="acc: ${cardList}">
         <td th:text="${acc.getId()}"></td>
-        <td th:text="${acc.getCurrentBalance().getAmount().toString()}"></td>
+        <td th:text="${acc.getAssociatedAccount().getId()}"></td>
+        <td th:text="${acc.getAssociatedAccount().getCurrentBalance()}"></td>
     </tr>
     </tbody>
 
 </table>
-<form action="/checking/new" method="POST" enctype="utf8">
-    <button class="btn" type="submit">Открыть новый счёт</button>
+<form action="/cards/new" method="GET" enctype="utf8">
+    <button class="btn" type="submit">Выпустить карту к счёту</button>
 </form>
 </body>
 </html>
