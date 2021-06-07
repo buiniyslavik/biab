@@ -37,6 +37,7 @@
         <td>Ставка</td>
         <td>Начислено %</td>
         <td>Штрафы</td>
+        <td>Ежемесячный платёж</td>
         <td>Дата следующего платежа</td>
     </tr>
     </thead>
@@ -50,6 +51,7 @@
         <td th:text="${acc.getInterestRate().toString()}"></td>
         <td th:text="${acc.getAccumulatedInterest().toString()}"></td>
         <td th:text="${acc.getAccumulatedPenalties().toString()}"></td>
+        <td th:text="${acc.getMonthlyPayment().toString()}"></td>
         <td th:text="${acc.getNextPaymentDueDate().toString()}"></td>
     </tr>
     </tbody>

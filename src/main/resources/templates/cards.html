@@ -37,7 +37,7 @@
 
     <tbody>
     <tr th:each="acc: ${cardList}">
-        <td th:text="${acc.getId()}"></td>
+        <td th:text="${acc.getCardNumber()}"></td>
         <td th:text="${acc.getAssociatedAccount()}"></td>
     </tr>
     </tbody>
