@@ -10,6 +10,7 @@ import svosin.biab.repos.CardRepository;
 
 import java.security.*;
 import java.util.Arrays;
+import java.util.Base64;
 
 @Service
 public class KeystoreService {
@@ -21,7 +22,7 @@ public class KeystoreService {
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
         kpg.initialize(2048);
         KeyPair keyPair = kpg.generateKeyPair();
-        Card card1 = new Card(card, Arrays.toString(keyPair.getPublic().getEncoded()));
+        Card card1 = new Card(card, Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded()));
         //cardKeysRepository.save(new CardKey(keyPair.getPublic(), forCardId));
         return new Pair<Card, PrivateKey>(card1, keyPair.getPrivate());
     }
