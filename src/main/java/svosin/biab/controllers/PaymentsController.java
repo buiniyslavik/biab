@@ -24,13 +24,13 @@ import java.util.List;
 @RequestMapping(path = "/pay")
 public class PaymentsController {
     @Autowired
-    CheckingAccountService checkingAccountService;
+    private CheckingAccountService checkingAccountService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    PaymentProcessingService paymentProcessingService;
+    private PaymentProcessingService paymentProcessingService;
 
     @Autowired
     private AutowireCapableBeanFactory autowireCapableBeanFactory;
