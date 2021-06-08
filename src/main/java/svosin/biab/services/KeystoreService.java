@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import svosin.biab.entities.Card;
+import svosin.biab.entities.CardPaymentNonce;
+import svosin.biab.repos.CardNonceRepository;
 import svosin.biab.repos.CardRepository;
 
 import java.security.*;
@@ -13,11 +15,15 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 public class KeystoreService {
     @Autowired
     CardRepository cardRepository;
+
+    @Autowired
+    CardNonceRepository cardNonceRepository;
 
     @SneakyThrows
     public Pair<Card, PrivateKey> createCardKey(Card card) {
@@ -46,5 +52,18 @@ public class KeystoreService {
         signature.update(data.getBytes());
         return signature.verify(Base64.getDecoder().decode(sig));
 
+    }
+
+    public CardPaymentNonce createNonceForCard(String cardNumber) {
+        var nonce = new CardPaymentNonce(cardNumber);
+        return cardNonceRepository.save(nonce);
+    }
+
+    public List<CardPaymentNonce> getNonceForCard(String cardNumber) {
+        return cardNonceRepository.getCardPaymentNonceByCardNumber(cardNumber);
+    }
+
+    public void destroyNonce(CardPaymentNonce nonce) {
+        cardNonceRepository.delete(nonce);
     }
 }
