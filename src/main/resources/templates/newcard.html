@@ -2,7 +2,9 @@
 <head>
     <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
     <style>
-        body { padding-top: 70px; }
+        body {
+            padding-top: 70px;
+        }
     </style>
 </head>
 <body>
@@ -22,19 +24,21 @@
     </div>
 </div>
 
-<h1>Выпуск карты</h1>
+<div class="container">
+    <h1>Выпуск карты</h1>
 
-<form action="new" th:object="${draft}" method="POST" enctype="utf8">
-    <div>
-        <label>Выпустить для:</label>
-        <select class="xlarge" th:field="*{accountToUseId}">
-            <option th:each="dropValue: ${accounts}"
-                    th:value="${dropValue.getId()}"
-                    th:text="${dropValue.getId() + '(' + dropValue.getCurrentBalance().toString() +')'}"></option>
-        </select>
-    </div>
+    <form action="new" th:object="${draft}" method="POST" enctype="utf8">
+        <div>
+            <label>Выпустить для:</label>
+            <select class="xlarge" th:field="*{accountToUseId}">
+                <option th:each="dropValue: ${accounts}"
+                        th:value="${dropValue.getId()}"
+                        th:text="${dropValue.getId() + '(' + dropValue.getCurrentBalance().toString() +')'}"></option>
+            </select>
+        </div>
 
-    <button class="btn primary" type="submit">Выпустить</button>
-</form>
+        <button class="btn primary" type="submit">Выпустить</button>
+    </form>
+</div>
 </body>
 </html>

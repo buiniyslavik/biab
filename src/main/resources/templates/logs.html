@@ -25,6 +25,8 @@
     </div>
 </div>
 
+
+<div class="container">
 <h1>История операций</h1>
 <h2 th:if="${#lists.isEmpty(entries)}">Операций нет!</h2>
 <table th:unless="${#lists.isEmpty(entries)}">
@@ -49,5 +51,6 @@
     </tbody>
 
 </table>
+</div>
 </body>
 </html>

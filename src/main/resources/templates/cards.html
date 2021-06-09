@@ -5,7 +5,9 @@
     <title>Карты</title>
     <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
     <style>
-        body { padding-top: 70px; }
+        body {
+            padding-top: 70px;
+        }
     </style>
 </head>
 <body>
@@ -25,26 +27,28 @@
     </div>
 </div>
 
-<h1>Карты</h1>
-<h2 th:if="${#lists.isEmpty(cardList)}">Открытых счетов нет!</h2>
-<table class="common-table" th:unless="${#lists.isEmpty(cardList)}">
-    <thead>
-    <tr>
-        <td>Номер карты</td>
-        <td>Номер счёта</td>
-    </tr>
-    </thead>
+<div class="container">
+    <h1>Карты</h1>
+    <h2 th:if="${#lists.isEmpty(cardList)}">Открытых счетов нет!</h2>
+    <table class="common-table" th:unless="${#lists.isEmpty(cardList)}">
+        <thead>
+        <tr>
+            <td>Номер карты</td>
+            <td>Номер счёта</td>
+        </tr>
+        </thead>
 
-    <tbody>
-    <tr th:each="acc: ${cardList}">
-        <td th:text="${acc.getCardNumber()}"></td>
-        <td th:text="${acc.getAssociatedAccount()}"></td>
-    </tr>
-    </tbody>
+        <tbody>
+        <tr th:each="acc: ${cardList}">
+            <td th:text="${acc.getCardNumber()}"></td>
+            <td th:text="${acc.getAssociatedAccount()}"></td>
+        </tr>
+        </tbody>
 
-</table>
-<form action="/cards/new" method="GET" enctype="utf8">
-    <button class="btn" type="submit">Выпустить карту к счёту</button>
-</form>
+    </table>
+    <form action="/cards/new" method="GET" enctype="utf8">
+        <button class="btn" type="submit">Выпустить карту к счёту</button>
+    </form>
+</div>
 </body>
 </html>

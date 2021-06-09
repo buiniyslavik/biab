@@ -25,6 +25,7 @@
     </div>
 </div>
 
+<div class="container">
 <h1>Открытые счета</h1>
 <h2 th:if="${#lists.isEmpty(chkAccounts)}">Открытых счетов нет!</h2>
 <table class="common-table" th:unless="${#lists.isEmpty(chkAccounts)}">
@@ -46,5 +47,6 @@
 <form action="/checking/new" method="POST" enctype="utf8">
     <button class="btn" type="submit">Открыть новый счёт</button>
 </form>
+</div>
 </body>
 </html>

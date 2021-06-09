@@ -5,7 +5,9 @@
     <title>Кредиты</title>
     <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
     <style>
-        body { padding-top: 70px; }
+        body {
+            padding-top: 70px;
+        }
     </style>
 </head>
 <body>
@@ -25,38 +27,40 @@
     </div>
 </div>
 
-<h1>Кредиты</h1>
-<h2 th:if="${#lists.isEmpty(lAccounts)}">Кредитов нет!</h2>
-<table th:unless="${#lists.isEmpty(lAccounts)}">
-    <thead>
-    <tr>
-        <td>Номер счёта</td>
-        <td>Сумма долга</td>
-        <td>Стартовая сумма</td>
-        <td>Выплачено</td>
-        <td>Ставка</td>
-        <td>Начислено %</td>
-        <td>Штрафы</td>
-        <td>Ежемесячный платёж</td>
-        <td>Дата следующего платежа</td>
-    </tr>
-    </thead>
+<div class="container">
+    <h1>Кредиты</h1>
+    <h2 th:if="${#lists.isEmpty(lAccounts)}">Кредитов нет!</h2>
+    <table th:unless="${#lists.isEmpty(lAccounts)}">
+        <thead>
+        <tr>
+            <td>Номер счёта</td>
+            <td>Сумма долга</td>
+            <td>Стартовая сумма</td>
+            <td>Выплачено</td>
+            <td>Ставка</td>
+            <td>Начислено %</td>
+            <td>Штрафы</td>
+            <td>Ежемесячный платёж</td>
+            <td>Дата следующего платежа</td>
+        </tr>
+        </thead>
 
-    <tbody>
-    <tr th:each="acc: ${lAccounts}">
-        <td th:text="${acc.getId()}"></td>
-        <td th:text="${acc.getOutstandingAmount().toString()}"></td>
-        <td th:text="${acc.getInitialAmount().toString()}"></td>
-        <td th:text="${acc.getRepaidAmount().toString()}"></td>
-        <td th:text="${acc.getInterestRate().toString()}"></td>
-        <td th:text="${acc.getAccumulatedInterest().toString()}"></td>
-        <td th:text="${acc.getAccumulatedPenalties().toString()}"></td>
-        <td th:text="${acc.getMonthlyPayment().toString()}"></td>
-        <td th:text="${acc.getNextPaymentDueDate().toString()}"></td>
-    </tr>
-    </tbody>
+        <tbody>
+        <tr th:each="acc: ${lAccounts}">
+            <td th:text="${acc.getId()}"></td>
+            <td th:text="${acc.getOutstandingAmount().toString()}"></td>
+            <td th:text="${acc.getInitialAmount().toString()}"></td>
+            <td th:text="${acc.getRepaidAmount().toString()}"></td>
+            <td th:text="${acc.getInterestRate().toString()}"></td>
+            <td th:text="${acc.getAccumulatedInterest().toString()}"></td>
+            <td th:text="${acc.getAccumulatedPenalties().toString()}"></td>
+            <td th:text="${acc.getMonthlyPayment().toString()}"></td>
+            <td th:text="${acc.getNextPaymentDueDate().toString()}"></td>
+        </tr>
+        </tbody>
 
-</table>
-<a href="/loans/new">Заявка на кредит</a>
+    </table>
+    <a href="/loans/new">Заявка на кредит</a>
+</div>
 </body>
 </html>

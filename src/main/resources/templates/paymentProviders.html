@@ -5,7 +5,9 @@
     <link rel="stylesheet" type="text/css" href="https://getbootstrap.com/1.0.0/assets/css/bootstrap-1.0.0.min.css">
     <title>Платежи</title>
     <style>
-        body { padding-top: 70px; }
+        body {
+            padding-top: 70px;
+        }
     </style>
 </head>
 <body>
@@ -25,30 +27,32 @@
     </div>
 </div>
 
-<h1>Платежи и сервисы</h1>
-<h2 th:if="${#lists.isEmpty(providers)}">Нет доступных платежей!</h2>
-<table th:unless="${#lists.isEmpty(providers)}">
-    <thead>
-    <tr>
-        <td>Название</td>
-        <td>Мин. сумма</td>
-        <td>Макс. сумма</td>
-        <td>Комиссия</td>
-    </tr>
-    </thead>
+<div class="container">
+    <h1>Платежи и сервисы</h1>
+    <h2 th:if="${#lists.isEmpty(providers)}">Нет доступных платежей!</h2>
+    <table th:unless="${#lists.isEmpty(providers)}">
+        <thead>
+        <tr>
+            <td>Название</td>
+            <td>Мин. сумма</td>
+            <td>Макс. сумма</td>
+            <td>Комиссия</td>
+        </tr>
+        </thead>
 
-    <tbody>
-    <tr th:each="p: ${providers}">
-        <td>
-            <a th:href="${'to/' + p.getClass().getName() + '/prepare'}"
-               th:text="${p.getName()}">name goes here</a>
-        </td>
-        <td th:text="${p.getMinAmount().toString()}">min am</td>
-        <td th:text="${p.getMaxAmount().toString()}">max am</td>
-        <td th:text="${p.getFee()}">fee %</td>
-    </tr>
-    </tbody>
+        <tbody>
+        <tr th:each="p: ${providers}">
+            <td>
+                <a th:href="${'to/' + p.getClass().getName() + '/prepare'}"
+                   th:text="${p.getName()}">name goes here</a>
+            </td>
+            <td th:text="${p.getMinAmount().toString()}">min am</td>
+            <td th:text="${p.getMaxAmount().toString()}">max am</td>
+            <td th:text="${p.getFee()}">fee %</td>
+        </tr>
+        </tbody>
 
-</table>
+    </table>
+</div>
 </body>
 </html>
