@@ -16,6 +16,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class KeystoreService {
@@ -55,6 +56,7 @@ public class KeystoreService {
     }
 
     public CardPaymentNonce createNonceForCard(String cardNumber) {
+        if(cardRepository.getByCardNumber(cardNumber) == null) throw new NoSuchElementException("No card found");
         var nonce = new CardPaymentNonce(cardNumber);
         return cardNonceRepository.save(nonce);
     }
