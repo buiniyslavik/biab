@@ -63,7 +63,7 @@ public class CardIncomingController {
             paymentProcessingService.payCard(merchant,
                     checkingAccountService.getById(card.getAssociatedAccount()),
                     amount,
-                    "*"+cardNumber.substring(11));
+                    "*"+cardNumber.substring(13));
             return new Pair<>("ID GOES HERE", true);
         }
         return new Pair<>("ID GOES HERE", false);
