@@ -43,11 +43,11 @@ public class CardIncomingController {
         String cardNumber = request.getCardNumber();
         String merchant = request.getMerchantName();
         Money amount = Money.parse(request.getAmount());
-        Integer nonce_req = request.getNonce();
+        String nonce_req = request.getNonce();
 
         List<CardPaymentNonce> activeNonces = keystoreService.getNonceForCard(request.getCardNumber());
 
-        List<Integer> nonces = new ArrayList<>();
+        List<String> nonces = new ArrayList<>();
         activeNonces.forEach(an -> nonces.add(an.getNonce()));
         int idx = nonces.indexOf(nonce_req);
 
@@ -70,8 +70,8 @@ public class CardIncomingController {
     }
 
     @PostMapping(value = "/nonce", consumes = "application/json")
-    public Pair<String, Integer> getNonceForPayment(@RequestBody String cardNumber) {
+    public Pair<String, String> getNonceForPayment(@RequestBody String cardNumber) {
         var nonce = keystoreService.createNonceForCard(cardNumber);
-        return new Pair<>(cardNumber, nonce.getNonce()); // good for 5 minutes
+        return new Pair<>(cardNumber, nonce.getNonce());
     }
 }
