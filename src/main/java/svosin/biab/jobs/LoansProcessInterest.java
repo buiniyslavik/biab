@@ -40,6 +40,7 @@ public class LoansProcessInterest extends QuartzJobBean {
         try {
             applicationContext = (ApplicationContext) jobExecutionContext.getScheduler().getContext().get(CONTEXT_KEY);
             loansService = applicationContext.getBean(LoansService.class);
+            paymentLogService = applicationContext.getBean(PaymentLogService.class);
 
         /*
         TODO:

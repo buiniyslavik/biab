@@ -151,7 +151,7 @@ public class LoanAccount {
     }
 
     public Money getOutstandingAmount() {
-        return initialAmount.plus(accumulatedPenalties).plus(accumulatedInterest);
+        return initialAmount.plus(accumulatedPenalties).plus(accumulatedInterest).minus(repaidAmount);
     }
 
 }
