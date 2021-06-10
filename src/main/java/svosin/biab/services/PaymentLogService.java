@@ -10,7 +10,6 @@ import svosin.biab.enums.LogOperationType;
 import svosin.biab.repos.LogRepository;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import svosin.biab.entities.Profile;
-import svosin.biab.repos.ProfileRepository;
 import svosin.biab.services.CheckingAccountService;
 import svosin.biab.services.PaymentLogService;
 import svosin.biab.services.UserService;

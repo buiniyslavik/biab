@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 import svosin.biab.enums.LogOperationType;
-import svosin.biab.repos.LoanAccountRepository;
 import svosin.biab.services.LoansService;
 import svosin.biab.services.PaymentLogService;
 

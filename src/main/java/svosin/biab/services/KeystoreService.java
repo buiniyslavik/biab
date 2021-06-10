@@ -3,7 +3,6 @@ package svosin.biab.services;
 import lombok.SneakyThrows;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import svosin.biab.entities.Card;
 import svosin.biab.entities.CardPaymentNonce;
@@ -11,9 +10,7 @@ import svosin.biab.repos.CardNonceRepository;
 import svosin.biab.repos.CardRepository;
 
 import java.security.*;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.NoSuchElementException;

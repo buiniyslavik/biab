@@ -1,12 +1,12 @@
 package svosin.biab.services;
 
-import svosin.biab.debitProviders.LoanPayProvider;
-import svosin.biab.debitProviders.NullDebitProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import svosin.biab.creditProviders.NullCreditProvider;
+import svosin.biab.debitProviders.LoanPayProvider;
+import svosin.biab.debitProviders.NullDebitProvider;
 import svosin.biab.entities.CheckingAccount;
 import svosin.biab.exceptions.OutOfFundsException;
 import svosin.biab.exceptions.PaymentProcessingException;

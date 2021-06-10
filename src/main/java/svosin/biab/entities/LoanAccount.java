@@ -9,12 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import svosin.biab.persistEntities.PersistLoanAccount;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 
 @Data
 @Document

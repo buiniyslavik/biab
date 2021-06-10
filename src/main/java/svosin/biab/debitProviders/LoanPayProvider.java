@@ -9,9 +9,6 @@ import svosin.biab.exceptions.PaymentProcessingException;
 import svosin.biab.interfaces.MoneyDebitProvider;
 import svosin.biab.services.LoansService;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 @Component
 public class LoanPayProvider implements MoneyDebitProvider {
 

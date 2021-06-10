@@ -3,7 +3,6 @@ package svosin.biab.entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import svosin.biab.enums.JobRiskLevel;
 
 import java.util.Date;
 

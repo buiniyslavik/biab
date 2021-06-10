@@ -4,9 +4,7 @@ package svosin.biab.entities;
 import lombok.Data;
 import org.joda.money.Money;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 import svosin.biab.persistEntities.PersistCheckingAccount;
 
 @Data

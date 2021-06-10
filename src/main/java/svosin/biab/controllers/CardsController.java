@@ -3,14 +3,18 @@ package svosin.biab.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import svosin.biab.entities.*;
-import svosin.biab.interfaces.MoneyDebitProvider;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import svosin.biab.entities.Card;
+import svosin.biab.entities.CardIssueDto;
+import svosin.biab.entities.CheckingAccount;
+import svosin.biab.entities.Profile;
 import svosin.biab.services.CardsService;
 import svosin.biab.services.CheckingAccountService;
 import svosin.biab.services.UserService;
 
-import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.List;
 
@@ -53,8 +57,6 @@ public class CardsController {
                 checkingAccountService.getById(draftDTO.getAccountToUseId()),
                 currentUser
         );
-        //return "checkingAccounts";
-        //return showAllCheckingAccounts(model, principal);
         return "redirect:all";
     }
 }

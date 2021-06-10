@@ -37,7 +37,6 @@ public class JobConfiguration {
         JobDetailImpl jobDetail = new JobDetailImpl();
         jobDetail.setKey(new JobKey("jobone", "mygroup"));
         jobDetail.setJobClass(LoansProcessInterest.class);
-        // remain stored in the job store even if no triggers point to it anymore
         jobDetail.setDurability(true);
         return jobDetail;
     }
@@ -49,12 +48,5 @@ public class JobConfiguration {
                 .withPriority(50)
                 .withSchedule(cronSchedule("0 0/1 * 1/1 * ? *"))
                 .build();
-
-                // Job is scheduled for 3+1 times with the interval of 30 seconds
-               /* .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(30)
-                        .withRepeatCount(3))
-                .startAt(DateBuilder.evenMinuteDateAfterNow())
-                .build();*/
     }
 }

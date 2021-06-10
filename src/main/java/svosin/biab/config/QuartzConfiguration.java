@@ -16,7 +16,6 @@ public class QuartzConfiguration {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
         scheduler.setApplicationContextSchedulerContextKey("applicationContext");
         scheduler.setConfigLocation(new ClassPathResource("quartz.properties"));
-        // scheduler.setAutoStartup(false);  // to not automatically start after startup
         scheduler.setWaitForJobsToCompleteOnShutdown(true);
         return scheduler;
     }

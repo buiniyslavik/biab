@@ -1,20 +1,19 @@
 package svosin.biab.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import svosin.biab.entities.*;
+import svosin.biab.entities.LoanAccount;
+import svosin.biab.entities.LoanRequest;
+import svosin.biab.entities.Profile;
 import svosin.biab.enums.JobRiskLevel;
 import svosin.biab.enums.LogOperationType;
 import svosin.biab.persistEntities.PersistLoanAccount;
 import svosin.biab.repos.LoanAccountRepository;
 import svosin.biab.repos.LoanRequestRepository;
 
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service

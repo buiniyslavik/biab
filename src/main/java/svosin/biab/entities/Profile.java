@@ -1,17 +1,14 @@
 package svosin.biab.entities;
 
-import com.google.common.hash.Hashing;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("UnstableApiUsage")
 

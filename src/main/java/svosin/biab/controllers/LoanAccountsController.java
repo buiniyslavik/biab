@@ -7,20 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import svosin.biab.entities.*;
-
-import svosin.biab.enums.JobRiskLevel;
+import svosin.biab.entities.LoanAccount;
+import svosin.biab.entities.LoanRequest;
+import svosin.biab.entities.LoanRequestDraftDTO;
+import svosin.biab.entities.Profile;
 import svosin.biab.services.CheckingAccountService;
 import svosin.biab.services.LoansService;
 import svosin.biab.services.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-
-import static svosin.biab.enums.JobRiskLevel.JOBRISK_HIGH;
 
 @Controller
 @RequestMapping(path = "/loans")
