@@ -62,7 +62,7 @@ public class CheckingAccountService {
     public String getBalanceById(String accountToUseId) {
         return checkingAccountRepository
                 .findById(accountToUseId).orElseThrow()
-                .getCurrentBalance(); // we're all strings here, we don't un-persist
+                .getCurrentBalance();
     }
 
     public CheckingAccount getById(String accountToUseId) {

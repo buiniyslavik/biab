@@ -10,8 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-@SuppressWarnings("UnstableApiUsage")
-
 @Data
 @Document
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

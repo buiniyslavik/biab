@@ -64,7 +64,6 @@ public class PaymentsController {
         model.addAttribute("accounts", userAccounts);
 
         PaymentDraftDTO paymentDraftDTO = new PaymentDraftDTO();
-  //      paymentDraftDTO.setProvider(provider.getName());
         model.addAttribute("draft", paymentDraftDTO);
 
         return "paymentStepOne";
@@ -97,7 +96,6 @@ public class PaymentsController {
     }
 
     @PostMapping("/to/{providerName}/process")
-//    @SneakyThrows
     public String payToProviderStepThree(
             Model model,
             Principal principal,

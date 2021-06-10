@@ -25,7 +25,6 @@ public class Card {
 
     @Field
     String publicKey;
-    //we store it in a different place for now
 
     public Card(Card card, String publicKey) {
         this.id = card.id;
@@ -40,9 +39,6 @@ public class Card {
         this.associatedProfile = profile.getUserId();
         // gen CC num
 
-        // The number of random digits that we need to generate is equal to the
-        // total length of the card number minus the start digits given by the
-        // user, minus the check digit at the end.
         Random random = new Random(System.currentTimeMillis());
         String bin = "232323";
         int randomNumberLength = 16 - (bin.length() + 1);
@@ -53,7 +49,6 @@ public class Card {
             builder.append(digit);
         }
 
-        // Do the Luhn algorithm to generate the check digit.
         int checkDigit = this.getCheckDigit(builder.toString());
         builder.append(checkDigit);
         this.cardNumber = builder.toString();
@@ -66,7 +61,6 @@ public class Card {
         int sum = 0;
         for (int i = 0; i < number.length(); i++) {
 
-            // Get the digit at the current position.
             int digit = Integer.parseInt(number.substring(i, (i + 1)));
 
             if ((i % 2) == 0) {
@@ -78,8 +72,6 @@ public class Card {
             sum += digit;
         }
 
-        // The check digit is the number required to make the sum a multiple of
-        // 10.
         int mod = sum % 10;
         return ((mod == 0) ? 0 : 10 - mod);
     }

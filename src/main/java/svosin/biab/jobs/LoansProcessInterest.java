@@ -40,11 +40,6 @@ public class LoansProcessInterest extends QuartzJobBean {
             applicationContext = (ApplicationContext) jobExecutionContext.getScheduler().getContext().get(CONTEXT_KEY);
             loansService = applicationContext.getBean(LoansService.class);
             paymentLogService = applicationContext.getBean(PaymentLogService.class);
-
-        /*
-        TODO:
-        fetch list of CAs for today and process interest
-         */
             log.info("looking for loans with due date " + LocalDate.now().minusDays(1).toString());
             var accsForToday = loansService.getAllByDueDate(LocalDate.now().minusDays(1));
             accsForToday.forEach(acc -> {

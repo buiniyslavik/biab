@@ -29,18 +29,7 @@ public class LoansService {
     PaymentLogService paymentLogService;
 
     double interestRate = 5.0;
-/*
-    public LoanAccount createLoan(
-            Double interestRate,
-            LocalDate expectedCloseDate,
-            Money latePaymentPenalty,
-            Money initialAmount
-    ) {
-        return loanAccountRepository.save(
-                new LoanAccount(interestRate, expectedCloseDate, latePaymentPenalty, initialAmount)
-        );
-    }
-*/
+
     public List<LoanAccount> getLoanAccountsOfProfile(Profile owner) {
         List<PersistLoanAccount> plist = loanAccountRepository.findAllByOwner(owner);
         List<LoanAccount> loans = new ArrayList<>();
@@ -61,41 +50,6 @@ public class LoansService {
         return loanId;
     }
 
-    //--------------------
-
-    public LoanRequest createLoanRequest(
-            Profile requesterProfile,
-            Integer requestedSum,
-            Integer requestedTerm,
-            Boolean isFemale,
-            Integer age,
-            Integer yearsOfLivingInASinglePlace,
-            JobRiskLevel jobRiskLevel,
-            Boolean hasRealty,
-            Boolean hasBankAccounts,
-            Boolean hasInsurance,
-            Boolean isWorkingInSocField,
-            Integer workExperience,
-            Integer workIncome
-    ) {
-        return loanRequestRepository.save(
-                new LoanRequest(
-                        requesterProfile,
-                        requestedSum,
-                        requestedTerm,
-                        isFemale,
-                        age,
-                        yearsOfLivingInASinglePlace,
-                        jobRiskLevel,
-                        hasRealty,
-                        hasBankAccounts,
-                        hasInsurance,
-                        isWorkingInSocField,
-                        workExperience,
-                        workIncome
-                )
-        );
-    }
 
     public LoanAccount getLoanById(String id) {
         return new LoanAccount(loanAccountRepository.findById(id).orElseThrow());
@@ -128,8 +82,6 @@ public class LoansService {
 
         Integer allowedSum = Math.toIntExact(Math.round(request.getWorkIncome() /
                 ((1 + (request.getRequestedTerm() + 1) * interestRate) / (2 * 12 * 100))));
-        // needs fixup that would factor the interest rate in
-
 
         if (currentRating >= 1.25 && allowedSum >= request.getRequestedSum())
             request.setIsApproved(true);

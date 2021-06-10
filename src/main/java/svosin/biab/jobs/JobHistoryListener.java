@@ -64,7 +64,6 @@ public class JobHistoryListener implements SchedulerPlugin, JobListener {
                 put("refireCount", context.getRefireCount());
                 put("result", String.valueOf(context.getResult()));
             }});
-            // TODO: have explict field: hasException: true / false ?
         } else {
             repository.add(new HashMap<String, Object>() {{
                 put("ts", new Date());

@@ -29,7 +29,7 @@ public class KeystoreService {
         kpg.initialize(2048);
         KeyPair keyPair = kpg.generateKeyPair();
         Card card1 = new Card(card, Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded()));
-        //cardKeysRepository.save(new CardKey(keyPair.getPublic(), forCardId));
+
         return new Pair<>(card1, keyPair.getPrivate());
     }
 

@@ -74,7 +74,6 @@ public class LoanAccountsController {
         LoanRequest lr = new LoanRequest(loanRequestInfo, currentUser);
         var lr2 = loanAccountService.assessLoanRequest(lr);
         loanAccountService.issueLoan(lr2, loanRequestInfo.getPayToAcc());
-       // return showAllLoans(model, principal);
         return "redirect:all";
     }
 

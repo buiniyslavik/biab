@@ -24,9 +24,4 @@ public class LoanRequestDraftDTO {
     Integer workExperience;
     Integer workIncome;
     String payToAcc;
-
-   // Double extCorrectionFactor = 0.0;
-
-   // private final Double passRate = 1.25;
-   // Boolean isApproved = false;
 }
